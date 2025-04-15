@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Networks - Layers and Feedforward Structure</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            font-size: 150%;
+        }
+        section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        h1, h2, h3, h4 {
+            color: #333;
+            margin-top: 20px;
+        }
+        p, li {
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .image-placeholder, .interactive-placeholder, .continue-button, .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
+            text-align: left;
+        }
+        .image-placeholder img, .interactive-placeholder img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think, .math-explainer {
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .vocab-section {
+            background-color: #f0f8ff;
+        }
+        .vocab-section h3 {
+            color: #1e90ff;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .vocab-section h4 {
+            color: #000;
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+        .vocab-term {
+            font-weight: bold;
+            color: #1e90ff;
+        }
+        .why-it-matters {
+            background-color: #ffe6f0;
+        }
+        .why-it-matters h3 {
+            color: #d81b60;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .stop-and-think {
+            background-color: #e6e6ff;
+        }
+        .stop-and-think h3 {
+            color: #4b0082;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .continue-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 15px;
+            color: #ffffff;
+            background-color: #007bff;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .reveal-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 15px;
+            color: #ffffff;
+            background-color: #4b0082;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .test-your-knowledge {
+            background-color: #e6ffe6; /* Light green background */
+        }
+        .test-your-knowledge h3 {
+            color: #28a745; /* Dark green heading */
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .test-your-knowledge h4 {
+            color: #000;
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+        .test-your-knowledge p {
+            margin-bottom: 15px;
+        }
+        .check-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 15px;
+            color: #ffffff;
+            background-color: #28a745; /* Green background */
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-size: 1em;
+        }
+        .faq-section {
+            background-color: #fffbea; /* Light yellow background */
+        }
+        .faq-section h3 {
+            color: #ffcc00; /* Bright yellow heading */
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .faq-section h4 {
+            color: #000;
+            font-size: 0.9em;
+            margin-top: 10px;
+            margin-bottom: 8px;
+        }
+        .math-explainer {
+            background-color: #f5f5f5;
+            border-left: 4px solid #007bff;
+        }
+        .math-explainer h3 {
+            color: #007bff;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .math-step {
+            margin-bottom: 10px;
+            padding-left: 15px;
+        }
+        .math-step-number {
+            font-weight: bold;
+            color: #007bff;
+            margin-right: 5px;
+        }
+        .math-note {
+            font-style: italic;
+            margin-top: 10px;
+            color: #666;
+        }
+        .option-container {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .option-container:hover {
+            background-color: #f9f9f9;
+        }
+        .option-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .correct-feedback {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect-feedback {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <section id="section1">
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Image shows several individual neuron icons being connected together to form layers in a network structure.">
+        </div>
+        <h1>Building Networks: Layers and Feedforward Structure</h1>
+        <p>We've met the artificial neuron, our basic processing unit. But like in the brain, the real power comes from connecting many neurons together. How do we organize them? We arrange them in <strong>layers</strong>.</p>
+        <div class="continue-button" onclick="showNextSection(2)">Continue</div>
+    </section>
+
+    <section id="section2">
+        <h2>The Layered Architecture</h2>
+        <p>Think of a typical feedforward neural network like a processing pipeline organized into distinct layers.</p>
+        <!-- Start: Simple Feedforward Network Diagram -->
+<div id="feedforward-diagram">
+
+    <style>
+        /* Scoped styles for the Feedforward Network Diagram */
+        #feedforward-diagram {
+            /* font-family: Arial, sans-serif; /* Use parent style */
+            padding: 20px 10px;
+            background-color: #ffffff;
+            font-size: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            text-align: center; /* Center SVG */
+        }
+
+        #feedforward-diagram svg {
+            display: inline-block;
+            width: 100%;
+            max-width: 500px; /* Adjust width as needed */
+            height: auto;
+            overflow: visible;
+            cursor: default;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Node Styles (using previous palette) */
+        #feedforward-diagram .ff-node {
+            stroke-width: 1.5;
+            filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.2)); /* Subtle shadow */
+        }
+        #feedforward-diagram .input-node-ff { fill: #d1f7ff; stroke: #00bcd4; } /* Light Cyan */
+        #feedforward-diagram .hidden-node-ff { fill: #fff5d4; stroke: #ffc107; } /* Amber */
+        #feedforward-diagram .output-node-ff { fill: #fce4ec; stroke: #e91e63; } /* Pink */
+
+         /* Line Style */
+        #feedforward-diagram .connection-line-ff {
+            stroke: #b0bec5; /* Lighter Blue Grey */
+            stroke-width: 1.5;
+            opacity: 0.8;
+        }
+
+        /* Text Styles */
+        #feedforward-diagram .label-text-ff { font-size: 13px; fill: #333; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+        #feedforward-diagram .layer-label-ff { font-weight: bold; font-size: 14px; fill: #546e7a; text-anchor: middle; dominant-baseline: hanging; }
+        #feedforward-diagram .subscript { font-size: 0.7em; baseline-shift: sub; }
+        #feedforward-diagram .superscript { font-size: 0.7em; baseline-shift: super; }
+
+        /* Arrowhead */
+        #feedforward-diagram .arrow-marker-ff polygon { fill: #b0bec5; }
+
+    </style>
+
+    <!-- Adjust viewBox as needed -->
+    <svg id="ann-svg-feedforward" viewBox="0 0 400 250">
+        <defs>
+            <marker id="arrowhead-ann-ff" class="arrow-marker-ff"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="strokeWidth" markerWidth="4" markerHeight="5"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+        </defs>
+
+         <!-- Layer Labels -->
+         <text class="layer-label-ff" x="50" y="20">Input Layer (L=0)</text>
+         <text class="layer-label-ff" x="200" y="20">Hidden Layer (L=1)</text>
+         <text class="layer-label-ff" x="350" y="20">Output Layer (L=2)</text>
+
+         <!-- Layer 0: Inputs -->
+         <g id="input-layer-ff">
+            <circle class="ff-node input-node-ff" cx="50" cy="80" r="15"/>
+            <text class="label-text-ff" x="50" y="80">x<tspan class="subscript">1</tspan></text>
+
+            <circle class="ff-node input-node-ff" cx="50" cy="170" r="15"/>
+             <text class="label-text-ff" x="50" y="170">x<tspan class="subscript">2</tspan></text>
+         </g>
+
+         <!-- Layer 1: Hidden -->
+         <g id="hidden-layer-ff">
+            <circle class="ff-node hidden-node-ff" cx="200" cy="50" r="15"/>
+             <text class="label-text-ff" x="200" y="50">a<tspan class="subscript">1</tspan><tspan class="superscript">(1)</tspan></text>
+
+            <circle class="ff-node hidden-node-ff" cx="200" cy="125" r="15"/>
+             <text class="label-text-ff" x="200" y="125">a<tspan class="subscript">2</tspan><tspan class="superscript">(1)</tspan></text>
+
+             <circle class="ff-node hidden-node-ff" cx="200" cy="200" r="15"/>
+             <text class="label-text-ff" x="200" y="200">a<tspan class="subscript">3</tspan><tspan class="superscript">(1)</tspan></text>
+         </g>
+
+         <!-- Layer 2: Output -->
+         <g id="output-layer-ff">
+            <circle class="ff-node output-node-ff" cx="350" cy="125" r="15"/>
+            <text class="label-text-ff" x="350" y="125">a<tspan class="subscript">1</tspan><tspan class="superscript">(2)</tspan></text>
+            <!-- Alternate label -->
+            <!-- <text class="label-text-ff" x="350" y="125">y</text> -->
+         </g>
+
+        <!-- Connections -->
+        <g id="connections-ff">
+            <!-- Layer 0 -> Layer 1 -->
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="50" marker-end="url(#arrowhead-ann-ff)"/>
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="125" marker-end="url(#arrowhead-ann-ff)"/>
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="200" marker-end="url(#arrowhead-ann-ff)"/>
+
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="50" marker-end="url(#arrowhead-ann-ff)"/>
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="125" marker-end="url(#arrowhead-ann-ff)"/>
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="200" marker-end="url(#arrowhead-ann-ff)"/>
+
+            <!-- Layer 1 -> Layer 2 -->
+            <line class="connection-line-ff" x1="215" y1="50" x2="335" y2="125" marker-end="url(#arrowhead-ann-ff)"/>
+            <line class="connection-line-ff" x1="215" y1="125" x2="335" y2="125" marker-end="url(#arrowhead-ann-ff)"/>
+            <line class="connection-line-ff" x1="215" y1="200" x2="335" y2="125" marker-end="url(#arrowhead-ann-ff)"/>
+        </g>
+
+    </svg>
+
+</div>
+<!-- End: Simple Feedforward Network Diagram -->
+ <div class="continue-button" onclick="showNextSection(3)">Continue</div>
+    </section>
+
+    <section id="section3">
+        <p>Let's look at the main types of layers:</p>
+        <div class="vocab-section">
+            <h3>Build Your Vocab</h3>
+            <h4 class="vocab-term">Input Layer</h4>
+            <p>The first layer of a neural network that receives the raw input data (features). It typically doesn't perform any computation, just passes the data to the first hidden layer.</p>
+            <h4 class="vocab-term">Hidden Layer(s)</h4>
+            <p>Layers situated between the input and output layers. Neurons in hidden layers perform computations (weighted sum + activation) and learn intermediate representations of the data. Networks can have zero, one, or many hidden layers.</p>
+            <h4 class="vocab-term">Output Layer</h4>
+            <p>The final layer of the network that produces the desired output, such as class probabilities for classification or a continuous value for regression.</p>
+        </div>
+ <div class="continue-button" onclick="showNextSection(4)">Continue</div>
+    </section>
+
+    <section id="section4">
+        <p>The number of neurons in each layer, and the number of hidden layers, are important design choices that define the network's <strong>architecture</strong>.</p>
+        <div class="continue-button" onclick="showNextSection(5)">Continue</div>
+    </section>
+
+    <section id="section5">
+        <h2>Feedforward Flow</h2>
+        <p>Notice the direction of the arrows in our network diagram?</p>
+        <!-- Start: Animated Feedforward Network Diagram -->
+<div id="feedforward-diagram-animated">
+
+    <style>
+        /* Scoped styles for the Animated Feedforward Network Diagram */
+        #feedforward-diagram-animated {
+            padding: 20px 10px;
+            background-color: #ffffff;
+            font-size: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #feedforward-diagram-animated svg {
+            display: inline-block;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            overflow: visible;
+            cursor: default;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Node Styles */
+        #feedforward-diagram-animated .ff-node {
+            stroke-width: 1.5;
+            filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.2));
+            transition: filter 0.3s ease-in-out; /* Smooth transition for potential future node highlight */
+        }
+        #feedforward-diagram-animated .input-node-ff { fill: #d1f7ff; stroke: #00bcd4; }
+        #feedforward-diagram-animated .hidden-node-ff { fill: #fff5d4; stroke: #ffc107; }
+        #feedforward-diagram-animated .output-node-ff { fill: #fce4ec; stroke: #e91e63; }
+
+         /* Line Style */
+        #feedforward-diagram-animated .connection-line-ff {
+            stroke: #b0bec5; /* Base color */
+            stroke-width: 1.5;
+            opacity: 0.6; /* Slightly fade base lines */
+            transition: stroke 0.4s ease-in-out, stroke-width 0.4s ease-in-out, opacity 0.4s ease-in-out;
+        }
+
+        /* Highlight style for arrows */
+        #feedforward-diagram-animated .highlight-arrow {
+            stroke: #0d47a1; /* Dark blue highlight */
+            stroke-width: 3;
+            opacity: 1;
+        }
+         /* Arrowhead style - base */
+         #feedforward-diagram-animated .arrow-marker-ff polygon {
+             fill: #b0bec5;
+             transition: fill 0.4s ease-in-out;
+         }
+         /* Arrowhead style - highlighted */
+         #feedforward-diagram-animated .highlight-arrow .arrow-marker-ff polygon, /* If marker is child */
+         #feedforward-diagram-animated .highlight-arrow[marker-end] .arrow-marker-ff polygon /* If marker is referenced */
+          {
+              /* Selector might need adjustment depending on SVG structure/implementation */
+              /* Targeting the polygon fill via the line's class is tricky. */
+              /* Alternative: Add class directly to marker via JS, or change marker url */
+              fill: #0d47a1 !important; /* Force highlight color */
+         }
+
+
+        /* Text Styles */
+        #feedforward-diagram-animated .label-text-ff { font-size: 13px; fill: #333; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+        #feedforward-diagram-animated .layer-label-ff { font-weight: bold; font-size: 14px; fill: #546e7a; text-anchor: middle; dominant-baseline: hanging; }
+        #feedforward-diagram-animated .subscript { font-size: 0.7em; baseline-shift: sub; }
+        #feedforward-diagram-animated .superscript { font-size: 0.7em; baseline-shift: super; }
+
+    </style>
+
+    <svg id="ann-svg-feedforward-animated" viewBox="0 0 400 250">
+        <defs>
+            <!-- Arrowhead Marker Definition -->
+            <marker id="arrowhead-ff-animated" class="arrow-marker-ff"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="strokeWidth" markerWidth="4" markerHeight="5"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" /> <!-- Path fill controlled by CSS -->
+            </marker>
+            <!-- Arrowhead Marker for Highlighted state (alternative if CSS fails) -->
+             <marker id="arrowhead-ff-animated-highlight" class="arrow-marker-ff-highlight"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="strokeWidth" markerWidth="4" markerHeight="5"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0d47a1" />
+            </marker>
+        </defs>
+
+         <!-- Layer Labels -->
+         <text class="layer-label-ff" x="50" y="20">Input Layer (L=0)</text>
+         <text class="layer-label-ff" x="200" y="20">Hidden Layer (L=1)</text>
+         <text class="layer-label-ff" x="350" y="20">Output Layer (L=2)</text>
+
+         <!-- Layer 0: Inputs -->
+         <g id="input-layer-ff-animated">
+            <circle class="ff-node input-node-ff" cx="50" cy="80" r="15"/>
+            <text class="label-text-ff" x="50" y="80">x<tspan class="subscript">1</tspan></text>
+            <circle class="ff-node input-node-ff" cx="50" cy="170" r="15"/>
+            <text class="label-text-ff" x="50" y="170">x<tspan class="subscript">2</tspan></text>
+         </g>
+
+         <!-- Layer 1: Hidden -->
+         <g id="hidden-layer-ff-animated">
+            <circle class="ff-node hidden-node-ff" cx="200" cy="50" r="15"/>
+            <text class="label-text-ff" x="200" y="50">a<tspan class="subscript">1</tspan><tspan class="superscript">(1)</tspan></text>
+            <circle class="ff-node hidden-node-ff" cx="200" cy="125" r="15"/>
+            <text class="label-text-ff" x="200" y="125">a<tspan class="subscript">2</tspan><tspan class="superscript">(1)</tspan></text>
+            <circle class="ff-node hidden-node-ff" cx="200" cy="200" r="15"/>
+            <text class="label-text-ff" x="200" y="200">a<tspan class="subscript">3</tspan><tspan class="superscript">(1)</tspan></text>
+         </g>
+
+         <!-- Layer 2: Output -->
+         <g id="output-layer-ff-animated">
+            <circle class="ff-node output-node-ff" cx="350" cy="125" r="15"/>
+            <text class="label-text-ff" x="350" y="125">a<tspan class="subscript">1</tspan><tspan class="superscript">(2)</tspan></text>
+         </g>
+
+        <!-- Connections Grouped by Stage -->
+        <!-- Stage 1: Layer 0 -> Layer 1 -->
+        <g id="connections-ff-0-1">
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="50" marker-end="url(#arrowhead-ff-animated)"/>
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="125" marker-end="url(#arrowhead-ff-animated)"/>
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="200" marker-end="url(#arrowhead-ff-animated)"/>
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="50" marker-end="url(#arrowhead-ff-animated)"/>
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="125" marker-end="url(#arrowhead-ff-animated)"/>
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="200" marker-end="url(#arrowhead-ff-animated)"/>
+        </g>
+
+         <!-- Stage 2: Layer 1 -> Layer 2 -->
+        <g id="connections-ff-1-2">
+            <line class="connection-line-ff" x1="215" y1="50" x2="335" y2="125" marker-end="url(#arrowhead-ff-animated)"/>
+            <line class="connection-line-ff" x1="215" y1="125" x2="335" y2="125" marker-end="url(#arrowhead-ff-animated)"/>
+            <line class="connection-line-ff" x1="215" y1="200" x2="335" y2="125" marker-end="url(#arrowhead-ff-animated)"/>
+        </g>
+
+    </svg>
+
+    <script>
+        (function() {
+            const container = document.getElementById('feedforward-diagram-animated');
+            if (!container) return;
+
+            const connections01 = container.querySelector('#connections-ff-0-1');
+            const connections12 = container.querySelector('#connections-ff-1-2');
+            const lines01 = connections01 ? connections01.querySelectorAll('.connection-line-ff') : [];
+            const lines12 = connections12 ? connections12.querySelectorAll('.connection-line-ff') : [];
+
+            const highlightClass = 'highlight-arrow';
+            const normalMarkerUrl = 'url(#arrowhead-ff-animated)';
+            const highlightMarkerUrl = 'url(#arrowhead-ff-animated-highlight)'; // Use separate marker
+
+            const stage1Duration = 1200; // ms to highlight stage 1
+            const stage2Duration = 1200; // ms to highlight stage 2
+            const pauseDuration = 500;   // ms pause between stages and before repeat
+            const totalCycleTime = stage1Duration + pauseDuration + stage2Duration + pauseDuration;
+
+            function animateFlow() {
+                // Clear previous highlights immediately
+                lines01.forEach(line => {
+                    line.classList.remove(highlightClass);
+                    line.setAttribute('marker-end', normalMarkerUrl);
+                });
+                lines12.forEach(line => {
+                    line.classList.remove(highlightClass);
+                    line.setAttribute('marker-end', normalMarkerUrl);
+                });
+
+                // Stage 1: Highlight Layer 0 -> Layer 1
+                setTimeout(() => {
+                    lines01.forEach(line => {
+                        line.classList.add(highlightClass);
+                        line.setAttribute('marker-end', highlightMarkerUrl); // Switch marker
+                    });
+                }, 0); // Start immediately
+
+                // Stage 2: Highlight Layer 1 -> Layer 2
+                setTimeout(() => {
+                    // Remove stage 1 highlight
+                    lines01.forEach(line => {
+                        line.classList.remove(highlightClass);
+                        line.setAttribute('marker-end', normalMarkerUrl);
+                    });
+                    // Add stage 2 highlight
+                    lines12.forEach(line => {
+                        line.classList.add(highlightClass);
+                         line.setAttribute('marker-end', highlightMarkerUrl); // Switch marker
+                    });
+                }, stage1Duration + pauseDuration);
+
+                 // End of Stage 2: Clear highlight before next cycle
+                setTimeout(() => {
+                    lines12.forEach(line => {
+                        line.classList.remove(highlightClass);
+                        line.setAttribute('marker-end', normalMarkerUrl);
+                    });
+                }, stage1Duration + pauseDuration + stage2Duration);
+            }
+
+            // Run the animation immediately and then repeat it
+            animateFlow(); // Initial run
+            setInterval(animateFlow, totalCycleTime); // Repeat cycle
+
+        })();
+    </script>
+
+</div>
+<!-- End: Animated Feedforward Network Diagram -->
+ <div class="continue-button" onclick="showNextSection(6)">Continue</div>
+    </section>
+
+    <section id="section6">
+        <p>Information travels in one direction: from the input layer, through the hidden layer(s), to the output layer. There are no connections that loop back or skip layers in this basic type of network. That's why they are called <strong>Feedforward Neural Networks</strong>.</p>
+ <div class="continue-button" onclick="showNextSection(7)">Continue</div>
+    </section>
+
+    <section id="section7">
+        <div class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <h4>Are there networks where information <em>does</em> loop back?</h4>
+            <p>Yes! Networks with feedback connections or loops are called Recurrent Neural Networks (RNNs). They are particularly useful for processing sequential data like text or time series, where information from previous steps needs to influence current processing. We mentioned LSTMs in Lesson 1 - those are a sophisticated type of RNN. But for now, we're focusing on the simpler feedforward structure.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(8)">Continue</div>
+    </section>
+
+    <section id="section8">
+        <h2>Fully Connected Layers</h2>
+        <p>Another common feature in these layered networks is how neurons are connected between adjacent layers.</p>
+        <!-- Start: Animated Feedforward Network Diagram (Specific Sequence) -->
+<div id="feedforward-diagram-animated-seq">
+
+    <style>
+        /* Scoped styles for the Animated Feedforward Network Diagram (Specific Sequence) */
+        #feedforward-diagram-animated-seq {
+            padding: 20px 10px;
+            background-color: #ffffff;
+            font-size: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #feedforward-diagram-animated-seq svg {
+            display: inline-block;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            overflow: visible;
+            cursor: default;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Node Styles */
+        #feedforward-diagram-animated-seq .ff-node {
+            stroke-width: 1.5;
+            filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.2));
+            transition: filter 0.3s ease-in-out;
+        }
+        #feedforward-diagram-animated-seq .input-node-ff { fill: #d1f7ff; stroke: #00bcd4; }
+        #feedforward-diagram-animated-seq .hidden-node-ff { fill: #fff5d4; stroke: #ffc107; }
+        #feedforward-diagram-animated-seq .output-node-ff { fill: #fce4ec; stroke: #e91e63; }
+
+         /* Line Style */
+        #feedforward-diagram-animated-seq .connection-line-ff {
+            stroke: #b0bec5; /* Base color */
+            stroke-width: 1.5;
+            opacity: 0.6;
+            transition: stroke 0.4s ease-in-out, stroke-width 0.4s ease-in-out, opacity 0.4s ease-in-out;
+        }
+
+        /* Highlight style for arrows */
+        #feedforward-diagram-animated-seq .highlight-arrow {
+            stroke: #0d47a1; /* Dark blue highlight */
+            stroke-width: 3;
+            opacity: 1;
+        }
+
+        /* Arrowhead Markers */
+        #feedforward-diagram-animated-seq .arrow-marker-ff polygon {
+            fill: #b0bec5; /* Base color */
+            transition: fill 0.4s ease-in-out; /* Transition (though JS switch is primary) */
+        }
+        /* Highlight marker style set directly in its definition */
+
+
+        /* Text Styles */
+        #feedforward-diagram-animated-seq .label-text-ff { font-size: 13px; fill: #333; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+        #feedforward-diagram-animated-seq .layer-label-ff { font-weight: bold; font-size: 14px; fill: #546e7a; text-anchor: middle; dominant-baseline: hanging; }
+        #feedforward-diagram-animated-seq .subscript { font-size: 0.7em; baseline-shift: sub; }
+        #feedforward-diagram-animated-seq .superscript { font-size: 0.7em; baseline-shift: super; }
+
+    </style>
+
+    <svg id="ann-svg-feedforward-animated-seq" viewBox="0 0 400 250">
+        <defs>
+            <!-- Default Arrowhead Marker -->
+            <marker id="arrowhead-ff-animated-seq" class="arrow-marker-ff"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="strokeWidth" markerWidth="4" markerHeight="5"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+            <!-- Highlighted Arrowhead Marker -->
+             <marker id="arrowhead-ff-animated-seq-highlight" class="arrow-marker-ff-highlight"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="strokeWidth" markerWidth="4" markerHeight="5"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0d47a1" /> <!-- Highlight color -->
+            </marker>
+        </defs>
+
+         <!-- Layer Labels -->
+         <text class="layer-label-ff" x="50" y="20">Input Layer (L=0)</text>
+         <text class="layer-label-ff" x="200" y="20">Hidden Layer (L=1)</text>
+         <text class="layer-label-ff" x="350" y="20">Output Layer (L=2)</text>
+
+         <!-- Layer 0: Inputs -->
+         <g id="input-layer-ff-animated-seq">
+            <circle class="ff-node input-node-ff" id="node-x1" cx="50" cy="80" r="15"/>
+            <text class="label-text-ff" x="50" y="80">x<tspan class="subscript">1</tspan></text>
+            <circle class="ff-node input-node-ff" id="node-x2" cx="50" cy="170" r="15"/>
+            <text class="label-text-ff" x="50" y="170">x<tspan class="subscript">2</tspan></text>
+         </g>
+
+         <!-- Layer 1: Hidden -->
+         <g id="hidden-layer-ff-animated-seq">
+            <circle class="ff-node hidden-node-ff" id="node-h1" cx="200" cy="50" r="15"/>
+            <text class="label-text-ff" x="200" y="50">a<tspan class="subscript">1</tspan><tspan class="superscript">(1)</tspan></text>
+            <circle class="ff-node hidden-node-ff" id="node-h2" cx="200" cy="125" r="15"/>
+            <text class="label-text-ff" x="200" y="125">a<tspan class="subscript">2</tspan><tspan class="superscript">(1)</tspan></text>
+            <circle class="ff-node hidden-node-ff" id="node-h3" cx="200" cy="200" r="15"/>
+            <text class="label-text-ff" x="200" y="200">a<tspan class="subscript">3</tspan><tspan class="superscript">(1)</tspan></text>
+         </g>
+
+         <!-- Layer 2: Output -->
+         <g id="output-layer-ff-animated-seq">
+            <circle class="ff-node output-node-ff" id="node-o1" cx="350" cy="125" r="15"/>
+            <text class="label-text-ff" x="350" y="125">a<tspan class="subscript">1</tspan><tspan class="superscript">(2)</tspan></text>
+         </g>
+
+        <!-- Connections Grouped by Stage/Origin -->
+        <!-- Stage 1: From x1 -->
+        <g id="connections-ff-x1">
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="50" marker-end="url(#arrowhead-ff-animated-seq)"/>
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="125" marker-end="url(#arrowhead-ff-animated-seq)"/>
+            <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="200" marker-end="url(#arrowhead-ff-animated-seq)"/>
+        </g>
+        <!-- Stage 2: From x2 -->
+         <g id="connections-ff-x2">
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="50" marker-end="url(#arrowhead-ff-animated-seq)"/>
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="125" marker-end="url(#arrowhead-ff-animated-seq)"/>
+            <line class="connection-line-ff" x1="65" y1="170" x2="185" y2="200" marker-end="url(#arrowhead-ff-animated-seq)"/>
+         </g>
+         <!-- Stage 3: From Hidden Layer -->
+        <g id="connections-ff-1-2">
+            <line class="connection-line-ff" x1="215" y1="50" x2="335" y2="125" marker-end="url(#arrowhead-ff-animated-seq)"/>
+            <line class="connection-line-ff" x1="215" y1="125" x2="335" y2="125" marker-end="url(#arrowhead-ff-animated-seq)"/>
+            <line class="connection-line-ff" x1="215" y1="200" x2="335" y2="125" marker-end="url(#arrowhead-ff-animated-seq)"/>
+        </g>
+
+    </svg>
+
+    <script>
+        (function() {
+            const container = document.getElementById('feedforward-diagram-animated-seq');
+            if (!container) return;
+
+            // Get connection groups
+            const connectionsX1 = container.querySelector('#connections-ff-x1');
+            const connectionsX2 = container.querySelector('#connections-ff-x2');
+            const connections12 = container.querySelector('#connections-ff-1-2');
+
+            // Get lines within each group
+            const linesX1 = connectionsX1 ? connectionsX1.querySelectorAll('.connection-line-ff') : [];
+            const linesX2 = connectionsX2 ? connectionsX2.querySelectorAll('.connection-line-ff') : [];
+            const lines12 = connections12 ? connections12.querySelectorAll('.connection-line-ff') : [];
+
+            // Animation parameters
+            const highlightClass = 'highlight-arrow';
+            const normalMarkerUrl = 'url(#arrowhead-ff-animated-seq)';
+            const highlightMarkerUrl = 'url(#arrowhead-ff-animated-seq-highlight)';
+
+            const stageDuration = 1000; // ms duration for each highlight stage
+            const pauseDuration = 400;   // ms pause between stages and before repeat
+            const totalCycleTime = (stageDuration * 3) + (pauseDuration * 3); // 3 stages, 3 pauses
+
+            // Helper functions to manage highlights
+            function highlightGroup(lines) {
+                lines.forEach(line => {
+                    line.classList.add(highlightClass);
+                    line.setAttribute('marker-end', highlightMarkerUrl);
+                });
+            }
+
+            function clearGroup(lines) {
+                lines.forEach(line => {
+                    line.classList.remove(highlightClass);
+                    line.setAttribute('marker-end', normalMarkerUrl);
+                });
+            }
+
+             function clearAllHighlights() {
+                 clearGroup(linesX1);
+                 clearGroup(linesX2);
+                 clearGroup(lines12);
+             }
+
+            // Animation sequence function
+            function animateFlowSpecific() {
+                clearAllHighlights(); // Reset at the start of each cycle
+
+                // Stage 1: Highlight connections from x1
+                setTimeout(() => {
+                    highlightGroup(linesX1);
+                }, 0); // Start immediately
+
+                // Clear Stage 1 highlight after its duration
+                 setTimeout(() => {
+                     clearGroup(linesX1);
+                 }, stageDuration);
+
+                // Stage 2: Highlight connections from x2 (after pause)
+                setTimeout(() => {
+                    highlightGroup(linesX2);
+                }, stageDuration + pauseDuration);
+
+                // Clear Stage 2 highlight after its duration
+                 setTimeout(() => {
+                     clearGroup(linesX2);
+                 }, stageDuration + pauseDuration + stageDuration);
+
+                // Stage 3: Highlight connections from hidden layer (after pause)
+                setTimeout(() => {
+                    highlightGroup(lines12);
+                }, stageDuration + pauseDuration + stageDuration + pauseDuration);
+
+                // Clear Stage 3 highlight after its duration (end of visible cycle)
+                setTimeout(() => {
+                    clearGroup(lines12);
+                }, stageDuration + pauseDuration + stageDuration + pauseDuration + stageDuration);
+            }
+
+            // Run the animation immediately and then repeat it
+            animateFlowSpecific(); // Initial run
+            setInterval(animateFlowSpecific, totalCycleTime); // Repeat cycle
+
+        })();
+    </script>
+
+</div>
+<!-- End: Animated Feedforward Network Diagram (Specific Sequence) -->
+ <div class="continue-button" onclick="showNextSection(9)">Continue</div>
+    </section>
+
+    <section id="section9">
+        <p>When every neuron in layer <code>l-1</code> is connected to every neuron in layer <code>l</code>, we call these <strong>fully connected layers</strong> (or sometimes 'dense' layers). This is a very common connection pattern, especially in simpler feedforward networks or parts of more complex ones.</p>
+ <div class="continue-button" onclick="showNextSection(10)">Continue</div>
+    </section>
+
+    <section id="section10">
+        <div class="vocab-section">
+            <h3>Build Your Vocab</h3>
+            <h4 class="vocab-term">Fully Connected Layer</h4>
+            <p>A layer in a neural network where each neuron receives input from <em>every</em> neuron in the previous layer.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(11)">Continue</div>
+    </section>
+
+    <section id="section11">
+        <h2>Deeper Networks</h2>
+        <p>We're not limited to just one hidden layer. We can stack multiple hidden layers to create <strong>deep neural networks</strong>.</p>
+        <!-- Start: Deeper Feedforward Network Diagram -->
+<div id="deep-feedforward-diagram">
+
+    <style>
+        /* Scoped styles for the Deeper Feedforward Network Diagram */
+        #deep-feedforward-diagram {
+            padding: 20px 10px;
+            background-color: #ffffff;
+            font-size: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #deep-feedforward-diagram svg {
+            display: inline-block;
+            width: 100%;
+            max-width: 700px; /* Increased width for more layers */
+            height: auto;
+            overflow: visible;
+            cursor: default;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Node Styles */
+        #deep-feedforward-diagram .ff-node {
+            stroke-width: 1.5;
+            filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.2));
+        }
+        #deep-feedforward-diagram .input-node-ff { fill: #d1f7ff; stroke: #00bcd4; } /* Cyan */
+        #deep-feedforward-diagram .hidden1-node-ff { fill: #fff5d4; stroke: #ffc107; } /* Amber */
+        #deep-feedforward-diagram .hidden2-node-ff { fill: #e8f5e9; stroke: #4caf50; } /* Green */
+        #deep-feedforward-diagram .hidden3-node-ff { fill: #ede7f6; stroke: #7e57c2; } /* Deep Purple Light */
+        #deep-feedforward-diagram .output-node-ff { fill: #fce4ec; stroke: #e91e63; } /* Pink */
+
+         /* Line Style */
+        #deep-feedforward-diagram .connection-line-ff {
+            stroke: #b0bec5; /* Lighter Blue Grey */
+            stroke-width: 1.5;
+            opacity: 0.7;
+        }
+
+        /* Text Styles */
+        #deep-feedforward-diagram .label-text-ff { font-size: 11px; fill: #333; text-anchor: middle; dominant-baseline: central; pointer-events: none; } /* Slightly smaller for deeper nets */
+        #deep-feedforward-diagram .layer-label-ff { font-weight: bold; font-size: 14px; fill: #546e7a; text-anchor: middle; dominant-baseline: hanging; }
+        #deep-feedforward-diagram .subscript { font-size: 0.7em; baseline-shift: sub; }
+        #deep-feedforward-diagram .superscript { font-size: 0.7em; baseline-shift: super; }
+
+        /* Arrowhead */
+        #deep-feedforward-diagram .arrow-marker-ff polygon { fill: #b0bec5; }
+
+    </style>
+
+    <!-- Adjust viewBox width and height -->
+    <svg id="ann-svg-deep-feedforward" viewBox="0 0 650 250">
+        <defs>
+            <marker id="arrowhead-ann-deep-ff" class="arrow-marker-ff"
+                    viewBox="0 0 10 10" refX="10" refY="5"
+                    markerUnits="strokeWidth" markerWidth="4" markerHeight="5"
+                    orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+        </defs>
+
+        <!-- Constants for horizontal positioning -->
+        <script>
+            const LAYER_X = [50, 175, 300, 425, 550]; // X coordinates for layers 0-4
+            const NODE_RADIUS = 12; // Smaller radius for deeper net
+        </script>
+
+         <!-- Layer Labels -->
+         <text class="layer-label-ff" x="50" y="10">Input Layer (L=0)</text>
+         <text class="layer-label-ff" x="175" y="10">Hidden 1 (L=1)</text>
+         <text class="layer-label-ff" x="300" y="10">Hidden 2 (L=2)</text>
+         <text class="layer-label-ff" x="425" y="10">Hidden 3 (L=3)</text>
+         <text class="layer-label-ff" x="550" y="10">Output Layer (L=4)</text>
+
+         <!-- Layer 0: Inputs (2 nodes) -->
+         <g id="input-layer-deep-ff">
+            <circle class="ff-node input-node-ff" cx="50" cy="85" r="12"/> <text class="label-text-ff" x="50" y="85">x<tspan class="subscript">1</tspan></text>
+            <circle class="ff-node input-node-ff" cx="50" cy="165" r="12"/> <text class="label-text-ff" x="50" y="165">x<tspan class="subscript">2</tspan></text>
+         </g>
+
+         <!-- Layer 1: Hidden 1 (3 nodes) -->
+         <g id="hidden1-layer-deep-ff">
+            <circle class="ff-node hidden1-node-ff" cx="175" cy="60" r="12"/> <text class="label-text-ff" x="175" y="60">a<tspan class="subscript">1</tspan><tspan class="superscript">(1)</tspan></text>
+            <circle class="ff-node hidden1-node-ff" cx="175" cy="125" r="12"/> <text class="label-text-ff" x="175" y="125">a<tspan class="subscript">2</tspan><tspan class="superscript">(1)</tspan></text>
+            <circle class="ff-node hidden1-node-ff" cx="175" cy="190" r="12"/> <text class="label-text-ff" x="175" y="190">a<tspan class="subscript">3</tspan><tspan class="superscript">(1)</tspan></text>
+         </g>
+
+         <!-- Layer 2: Hidden 2 (3 nodes) -->
+         <g id="hidden2-layer-deep-ff">
+             <circle class="ff-node hidden2-node-ff" cx="300" cy="60" r="12"/> <text class="label-text-ff" x="300" y="60">a<tspan class="subscript">1</tspan><tspan class="superscript">(2)</tspan></text>
+             <circle class="ff-node hidden2-node-ff" cx="300" cy="125" r="12"/> <text class="label-text-ff" x="300" y="125">a<tspan class="subscript">2</tspan><tspan class="superscript">(2)</tspan></text>
+             <circle class="ff-node hidden2-node-ff" cx="300" cy="190" r="12"/> <text class="label-text-ff" x="300" y="190">a<tspan class="subscript">3</tspan><tspan class="superscript">(2)</tspan></text>
+         </g>
+
+         <!-- Layer 3: Hidden 3 (2 nodes) -->
+         <g id="hidden3-layer-deep-ff">
+            <circle class="ff-node hidden3-node-ff" cx="425" cy="85" r="12"/> <text class="label-text-ff" x="425" y="85">a<tspan class="subscript">1</tspan><tspan class="superscript">(3)</tspan></text>
+            <circle class="ff-node hidden3-node-ff" cx="425" cy="165" r="12"/> <text class="label-text-ff" x="425" y="165">a<tspan class="subscript">2</tspan><tspan class="superscript">(3)</tspan></text>
+         </g>
+
+         <!-- Layer 4: Output (1 node) -->
+         <g id="output-layer-deep-ff">
+            <circle class="ff-node output-node-ff" cx="550" cy="125" r="12"/>
+            <text class="label-text-ff" x="550" y="125">a<tspan class="subscript">1</tspan><tspan class="superscript">(4)</tspan></text>
+         </g>
+
+        <!-- Connections -->
+        <g id="connections-deep-ff">
+            <!-- L0 -> L1 -->
+            <line class="connection-line-ff" x1="62" y1="85" x2="163" y2="60" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="62" y1="85" x2="163" y2="125" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="62" y1="85" x2="163" y2="190" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="62" y1="165" x2="163" y2="60" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="62" y1="165" x2="163" y2="125" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="62" y1="165" x2="163" y2="190" marker-end="url(#arrowhead-ann-deep-ff)"/>
+
+            <!-- L1 -> L2 -->
+            <line class="connection-line-ff" x1="187" y1="60" x2="288" y2="60" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="187" y1="60" x2="288" y2="125" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="187" y1="60" x2="288" y2="190" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="187" y1="125" x2="288" y2="60" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="187" y1="125" x2="288" y2="125" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="187" y1="125" x2="288" y2="190" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="187" y1="190" x2="288" y2="60" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="187" y1="190" x2="288" y2="125" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="187" y1="190" x2="288" y2="190" marker-end="url(#arrowhead-ann-deep-ff)"/>
+
+            <!-- L2 -> L3 -->
+            <line class="connection-line-ff" x1="312" y1="60" x2="413" y2="85" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="312" y1="60" x2="413" y2="165" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="312" y1="125" x2="413" y2="85" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="312" y1="125" x2="413" y2="165" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="312" y1="190" x2="413" y2="85" marker-end="url(#arrowhead-ann-deep-ff)"/>
+            <line class="connection-line-ff" x1="312" y1="190" x2="413" y2="165" marker-end="url(#arrowhead-ann-deep-ff)"/>
+
+             <!-- L3 -> L4 -->
+             <line class="connection-line-ff" x1="437" y1="85" x2="538" y2="125" marker-end="url(#arrowhead-ann-deep-ff)"/>
+             <line class="connection-line-ff" x1="437" y1="165" x2="538" y2="125" marker-end="url(#arrowhead-ann-deep-ff)"/>
+        </g>
+
+    </svg>
+
+</div>
+<!-- End: Deeper Feedforward Network Diagram -->
+ <div class="continue-button" onclick="showNextSection(12)">Continue</div>
+    </section>
+
+    <section id="section12">
+        <p>Having multiple hidden layers allows the network to learn features hierarchically. Early layers might learn simple patterns from the input, while later layers combine those simple patterns to detect more complex concepts. This capability is a key reason for the success of deep learning.</p>
+ <div class="continue-button" onclick="showNextSection(13)">Continue</div>
+    </section>
+
+    <section id="section13">
+        <div class="why-it-matters">
+            <h3>Why It Matters</h3>
+            <p>The depth of a network (number of layers) is a crucial aspect of its architecture. Deeper networks can often learn more complex functions more efficiently than shallow networks with the same number of total neurons, although they can also be harder to train.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(14)">Continue</div>
+    </section>
+
+    <section id="section14">
+        <h2>Notation for Networks</h2>
+        <p>As networks get bigger, we need precise notation to keep track of everything.</p>
+        <p>Let's refine the notation we introduced for a single neuron:</p>
+        <div class="math-explainer">
+    <h3>Network Notation</h3>
+    <div class="math-step">
+        <span class="math-step-number">1.</span> We number layers starting from \(l = 0\) for the input layer.
+    </div>
+    <div class="math-step">
+        <span class="math-step-number">2.</span> \(a_j^{(l)}\): Represents the <strong>activation</strong> (output) of the \(j\)-th neuron in layer \(l\).
+    </div>
+    <div class="math-step">
+        <span class="math-step-number">3.</span> \(b_j^{(l)}\): Represents the <strong>bias</strong> of the \(j\)-th neuron in layer \(l\).
+    </div>
+    <div class="math-step">
+        <span class="math-step-number">4.</span> \(w_{ij}^{(l)}\): Represents the <strong>weight</strong> of the connection <em>from</em> neuron \(i\) in the <em>previous</em> layer (\(l - 1\)) <em>to</em> neuron \(j\) in the <em>current</em> layer (\(l\)).
+    </div>
+    <div class="math-note">
+        Pay close attention to the indices for the weight \(w_{ij}^{(l)}\): \(i\) is the index in the <em>source</em> layer (\(l - 1\)), \(j\) is the index in the <em>destination</em> layer (\(l\)), and \(l\) refers to the layer the weight <em>goes into</em>.
+    </div>
+</div>
+
+        <!-- Start: Interactive Network Diagram Navigator (Labeled - Spaced v2) -->
+<div id="interactive-ann-navigator-labeled-spaced-v2">
+
+    <style>
+        /* Scoped styles (remain the same as previous version) */
+        #interactive-ann-navigator-labeled-spaced-v2 { padding: 15px; background-color: #ffffff; font-size: 100%; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        #interactive-ann-navigator-labeled-spaced-v2 svg { display: inline-block; width: 100%; max-width: 550px; height: auto; overflow: visible; cursor: default; font-family: Arial, sans-serif; margin-bottom: 15px; }
+        #interactive-ann-navigator-labeled-spaced-v2 .interactive-element { cursor: pointer; }
+        #interactive-ann-navigator-labeled-spaced-v2 .ff-node { stroke-width: 1.5; filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.2)); transition: stroke 0.2s ease, stroke-width 0.2s ease; }
+        #interactive-ann-navigator-labeled-spaced-v2 .input-node-ff { fill: #d1f7ff; stroke: #00bcd4; }
+        #interactive-ann-navigator-labeled-spaced-v2 .hidden-node-ff { fill: #fff5d4; stroke: #ffc107; }
+        #interactive-ann-navigator-labeled-spaced-v2 .output-node-ff { fill: #fce4ec; stroke: #e91e63; }
+        #interactive-ann-navigator-labeled-spaced-v2 .connection-line-ff { stroke: #b0bec5; stroke-width: 1.5; opacity: 0.7; transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease; }
+        #interactive-ann-navigator-labeled-spaced-v2 .connection-click-target { stroke: transparent; stroke-width: 10; cursor: pointer; }
+        #interactive-ann-navigator-labeled-spaced-v2 .bias-arrow-ff { stroke: #757575; stroke-width: 1; opacity: 0.8; transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease; }
+        #interactive-ann-navigator-labeled-spaced-v2 .highlight.ff-node { stroke: #0d47a1; stroke-width: 3.5; }
+        #interactive-ann-navigator-labeled-spaced-v2 .highlight.connection-line-ff { stroke: #0d47a1; stroke-width: 3; opacity: 1; }
+        #interactive-ann-navigator-labeled-spaced-v2 .highlight.bias-label-ff { fill: #f57f17; font-weight: bold; }
+        #interactive-ann-navigator-labeled-spaced-v2 .highlight.bias-arrow-ff { stroke: #f57f17; stroke-width: 2; opacity: 1; }
+        #interactive-ann-navigator-labeled-spaced-v2 .highlight.weight-label-ff { fill: #0d47a1; font-weight: bold; }
+        #interactive-ann-navigator-labeled-spaced-v2 .marker-default polygon { fill: #b0bec5; }
+        #interactive-ann-navigator-labeled-spaced-v2 .marker-highlight polygon { fill: #0d47a1; }
+        #interactive-ann-navigator-labeled-spaced-v2 .marker-bias-arrow polygon { fill: #757575; }
+        #interactive-ann-navigator-labeled-spaced-v2 .marker-bias-arrow-highlight polygon { fill: #f57f17; }
+        #interactive-ann-navigator-labeled-spaced-v2 .label-text-ff { font-size: 13px; fill: #333; text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+        #interactive-ann-navigator-labeled-spaced-v2 .layer-label-ff { font-weight: bold; font-size: 14px; fill: #546e7a; text-anchor: middle; dominant-baseline: hanging; }
+        #interactive-ann-navigator-labeled-spaced-v2 .subscript { font-size: 0.7em; baseline-shift: sub; }
+        #interactive-ann-navigator-labeled-spaced-v2 .superscript { font-size: 0.7em; baseline-shift: super; }
+        #interactive-ann-navigator-labeled-spaced-v2 .weight-label-ff,
+        #interactive-ann-navigator-labeled-spaced-v2 .bias-label-ff { font-size: 10px; font-family: 'Times New Roman', Times, serif; font-style: italic; fill: #546e7a; text-anchor: middle; transition: fill 0.2s ease, font-weight 0.2s ease; }
+        #interactive-ann-navigator-labeled-spaced-v2 .bias-label-ff { dominant-baseline: auto; }
+        #interactive-ann-navigator-labeled-spaced-v2 #description-interactive-ann-labeled-spaced-v2 { padding: 15px 20px; margin: 0 15px 15px 15px; background-color: #f8f9fa; border-radius: 5px; min-height: 3em; text-align: left; color: #444; line-height: 1.6; font-size: 1em; transition: background-color 0.3s ease; }
+        #interactive-ann-navigator-labeled-spaced-v2 #description-interactive-ann-labeled-spaced-v2 strong { color: #333; font-weight: bold; }
+        #interactive-ann-navigator-labeled-spaced-v2 #description-interactive-ann-labeled-spaced-v2 code { background-color: #e9ecef; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.95em;}
+    </style>
+
+    <svg id="ann-svg-interactive-labeled-spaced-v2" viewBox="0 0 400 270">
+        <defs>
+             <!-- Markers -->
+             <marker id="arrowhead-labeled-spaced-v2-default" class="marker-default" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" /></marker>
+             <marker id="arrowhead-labeled-spaced-v2-highlight" class="marker-highlight" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" /></marker>
+             <marker id="arrowhead-bias-spaced-v2-default" class="marker-bias-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="strokeWidth" markerWidth="5" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" /></marker>
+             <marker id="arrowhead-bias-spaced-v2-highlight" class="marker-bias-arrow-highlight" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="strokeWidth" markerWidth="5" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" /></marker>
+        </defs>
+
+         <!-- Layer Labels -->
+         <text class="layer-label-ff" x="50" y="10">Input (L=0)</text>
+         <text class="layer-label-ff" x="200" y="10">Hidden (L=1)</text>
+         <text class="layer-label-ff" x="350" y="10">Output (L=2)</text>
+
+         <!-- Layer 0: Inputs -->
+         <g id="input-layer-interactive-labeled-spaced-v2">
+            <circle class="ff-node input-node-ff interactive-element" id="node-x1-labeled-spaced-v2" cx="50" cy="80" r="15"/> <text class="label-text-ff" x="50" y="80">x<tspan class="subscript">1</tspan></text>
+            <circle class="ff-node input-node-ff interactive-element" id="node-x2-labeled-spaced-v2" cx="50" cy="170" r="15"/> <text class="label-text-ff" x="50" y="170">x<tspan class="subscript">2</tspan></text>
+         </g>
+
+         <!-- Layer 1: Hidden -->
+         <g id="hidden-layer-interactive-labeled-spaced-v2">
+            <circle class="ff-node hidden-node-ff interactive-element" id="node-h1-labeled-spaced-v2" cx="200" cy="50" r="15"/> <text class="label-text-ff" x="200" y="50">a<tspan class="subscript">1</tspan><tspan class="superscript">(1)</tspan></text>
+            <circle class="ff-node hidden-node-ff interactive-element" id="node-h2-labeled-spaced-v2" cx="200" cy="125" r="15"/> <text class="label-text-ff" x="200" y="125">a<tspan class="subscript">2</tspan><tspan class="superscript">(1)</tspan></text>
+            <circle class="ff-node hidden-node-ff interactive-element" id="node-h3-labeled-spaced-v2" cx="200" cy="200" r="15"/> <text class="label-text-ff" x="200" y="200">a<tspan class="subscript">3</tspan><tspan class="superscript">(1)</tspan></text>
+         </g>
+
+         <!-- Layer 2: Output -->
+         <g id="output-layer-interactive-labeled-spaced-v2">
+            <circle class="ff-node output-node-ff interactive-element" id="node-o1-labeled-spaced-v2" cx="350" cy="125" r="15"/> <text class="label-text-ff" x="350" y="125">a<tspan class="subscript">1</tspan><tspan class="superscript">(2)</tspan></text>
+         </g>
+
+        <!-- Bias Labels and Arrows -->
+        <g id="bias-elements-labeled-spaced-v2">
+             <text class="bias-label-ff interactive-element" id="bias-h1-label-spaced-v2" x="170" y="30">b<tspan class="subscript">1</tspan><tspan class="superscript">(1)</tspan></text>
+             <line class="bias-arrow-ff" id="bias-h1-arrow-spaced-v2" x1="180" y1="35" x2="190" y2="42" marker-end="url(#arrowhead-bias-spaced-v2-default)"/>
+             <text class="bias-label-ff interactive-element" id="bias-h2-label-spaced-v2" x="170" y="110">b<tspan class="subscript">2</tspan><tspan class="superscript">(1)</tspan></text>
+             <line class="bias-arrow-ff" id="bias-h2-arrow-spaced-v2" x1="180" y1="115" x2="190" y2="119" marker-end="url(#arrowhead-bias-spaced-v2-default)"/>
+             <text class="bias-label-ff interactive-element" id="bias-h3-label-spaced-v2" x="170" y="185">b<tspan class="subscript">3</tspan><tspan class="superscript">(1)</tspan></text>
+             <line class="bias-arrow-ff" id="bias-h3-arrow-spaced-v2" x1="180" y1="190" x2="190" y2="194" marker-end="url(#arrowhead-bias-spaced-v2-default)"/>
+             <text class="bias-label-ff interactive-element" id="bias-o1-label-spaced-v2" x="320" y="110">b<tspan class="subscript">1</tspan><tspan class="superscript">(2)</tspan></text>
+             <line class="bias-arrow-ff" id="bias-o1-arrow-spaced-v2" x1="330" y1="115" x2="340" y2="119" marker-end="url(#arrowhead-bias-spaced-v2-default)"/>
+        </g>
+
+        <!-- Connections and Weight Labels (More Aggressive Spacing) -->
+        <g id="connections-labeled-spaced-v2">
+            <!-- Layer 0 -> Layer 1 -->
+            <line class="connection-line-ff" id="line-x1-h1-labeled-spaced-v2" x1="65" y1="80" x2="185" y2="50" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+            <text class="weight-label-ff interactive-element" id="weight-x1-h1-label-spaced-v2" x="110" y="60">w<tspan class="subscript">11</tspan><tspan class="superscript">(1)</tspan></text> <!-- Above line -->
+
+            <line class="connection-line-ff" id="line-x1-h2-labeled-spaced-v2" x1="65" y1="80" x2="185" y2="125" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+             <text class="weight-label-ff interactive-element" id="weight-x1-h2-label-spaced-v2" x="130" y="95">w<tspan class="subscript">12</tspan><tspan class="superscript">(1)</tspan></text> <!-- Below line, shifted right -->
+
+            <line class="connection-line-ff" id="line-x1-h3-labeled-spaced-v2" x1="65" y1="80" x2="185" y2="200" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+             <text class="weight-label-ff interactive-element" id="weight-x1-h3-label-spaced-v2" x="110" y="150">w<tspan class="subscript">13</tspan><tspan class="superscript">(1)</tspan></text> <!-- Above line -->
+
+            <line class="connection-line-ff" id="line-x2-h1-labeled-spaced-v2" x1="65" y1="170" x2="185" y2="50" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+             <text class="weight-label-ff interactive-element" id="weight-x2-h1-label-spaced-v2" x="110" y="118">w<tspan class="subscript">21</tspan><tspan class="superscript">(1)</tspan></text> <!-- Below line -->
+
+            <line class="connection-line-ff" id="line-x2-h2-labeled-spaced-v2" x1="65" y1="170" x2="185" y2="125" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+             <text class="weight-label-ff interactive-element" id="weight-x2-h2-label-spaced-v2" x="130" y="155">w<tspan class="subscript">22</tspan><tspan class="superscript">(1)</tspan></text> <!-- Above line, shifted right -->
+
+            <line class="connection-line-ff" id="line-x2-h3-labeled-spaced-v2" x1="65" y1="170" x2="185" y2="200" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+             <text class="weight-label-ff interactive-element" id="weight-x2-h3-label-spaced-v2" x="110" y="190">w<tspan class="subscript">23</tspan><tspan class="superscript">(1)</tspan></text> <!-- Below line -->
+
+            <!-- Layer 1 -> Layer 2 -->
+            <line class="connection-line-ff" id="line-h1-o1-labeled-spaced-v2" x1="215" y1="50" x2="335" y2="125" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+             <text class="weight-label-ff interactive-element" id="weight-h1-o1-label-spaced-v2" x="265" y="80">w<tspan class="subscript">11</tspan><tspan class="superscript">(2)</tspan></text> <!-- Above line -->
+
+            <line class="connection-line-ff" id="line-h2-o1-labeled-spaced-v2" x1="215" y1="125" x2="335" y2="125" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+             <text class="weight-label-ff interactive-element" id="weight-h2-o1-label-spaced-v2" x="275" y="138">w<tspan class="subscript">21</tspan><tspan class="superscript">(2)</tspan></text> <!-- Below line -->
+
+            <line class="connection-line-ff" id="line-h3-o1-labeled-spaced-v2" x1="215" y1="200" x2="335" y2="125" marker-end="url(#arrowhead-labeled-spaced-v2-default)"/>
+            <text class="weight-label-ff interactive-element" id="weight-h3-o1-label-spaced-v2" x="265" y="170">w<tspan class="subscript">31</tspan><tspan class="superscript">(2)</tspan></text> <!-- Above line -->
+
+             <!-- Invisible Click Targets for Lines -->
+            <line class="connection-click-target interactive-element" data-targetline="line-x1-h1-labeled-spaced-v2" x1="65" y1="80" x2="185" y2="50"/>
+            <line class="connection-click-target interactive-element" data-targetline="line-x1-h2-labeled-spaced-v2" x1="65" y1="80" x2="185" y2="125"/>
+            <line class="connection-click-target interactive-element" data-targetline="line-x1-h3-labeled-spaced-v2" x1="65" y1="80" x2="185" y2="200"/>
+            <line class="connection-click-target interactive-element" data-targetline="line-x2-h1-labeled-spaced-v2" x1="65" y1="170" x2="185" y2="50"/>
+            <line class="connection-click-target interactive-element" data-targetline="line-x2-h2-labeled-spaced-v2" x1="65" y1="170" x2="185" y2="125"/>
+            <line class="connection-click-target interactive-element" data-targetline="line-x2-h3-labeled-spaced-v2" x1="65" y1="170" x2="185" y2="200"/>
+            <line class="connection-click-target interactive-element" data-targetline="line-h1-o1-labeled-spaced-v2" x1="215" y1="50" x2="335" y2="125"/>
+            <line class="connection-click-target interactive-element" data-targetline="line-h2-o1-labeled-spaced-v2" x1="215" y1="125" x2="335" y2="125"/>
+            <line class="connection-click-target interactive-element" data-targetline="line-h3-o1-labeled-spaced-v2" x1="215" y1="200" x2="335" y2="125"/>
+        </g>
+    </svg>
+
+    <!-- Description Area -->
+    <div id="description-interactive-ann-labeled-spaced-v2">Click on a neuron, connection line, weight (w), or bias (b) label to learn more.</div>
+
+    <script>
+        // Script remains the same - just ensure IDs match the updated SVG
+        (function() {
+            const container = document.getElementById('interactive-ann-navigator-labeled-spaced-v2'); // *** Updated container ID ***
+            if (!container) return;
+
+            const svg = container.querySelector('#ann-svg-interactive-labeled-spaced-v2'); // *** Updated SVG ID ***
+            const descriptionEl = container.querySelector('#description-interactive-ann-labeled-spaced-v2'); // *** Updated Desc ID ***
+            const interactiveElements = container.querySelectorAll('.interactive-element');
+
+            // Marker URLs (update based on new IDs in SVG defs)
+            const defaultMarker = 'url(#arrowhead-labeled-spaced-v2-default)';
+            const highlightMarker = 'url(#arrowhead-labeled-spaced-v2-highlight)';
+            const defaultBiasMarker = 'url(#arrowhead-bias-spaced-v2-default)';
+            const highlightBiasMarker = 'url(#arrowhead-bias-spaced-v2-highlight)';
+
+            // --- Data Mapping (Update IDs to match SVG) ---
+            const elementInfo = {
+                 // Neurons
+                 'node-x1-labeled-spaced-v2': { type: 'neuron', label: 'x<sub>1</sub>', outgoingLines: ['line-x1-h1-labeled-spaced-v2', 'line-x1-h2-labeled-spaced-v2', 'line-x1-h3-labeled-spaced-v2'], description: 'Input feature <code>x<sub>1</sub></code>.' },
+                 'node-x2-labeled-spaced-v2': { type: 'neuron', label: 'x<sub>2</sub>', outgoingLines: ['line-x2-h1-labeled-spaced-v2', 'line-x2-h2-labeled-spaced-v2', 'line-x2-h3-labeled-spaced-v2'], description: 'Input feature <code>x<sub>2</sub></code>.' },
+                 'node-h1-labeled-spaced-v2': { type: 'neuron', label: 'a<sub>1</sub><sup>(1)</sup>', incomingLines: ['line-x1-h1-labeled-spaced-v2', 'line-x2-h1-labeled-spaced-v2'], outgoingLines: ['line-h1-o1-labeled-spaced-v2'], biasId: 'bias-h1-label-spaced-v2', biasArrowId: 'bias-h1-arrow-spaced-v2', description: 'Activation <code>a<sub>1</sub><sup>(1)</sup></code> of the first hidden neuron.' },
+                 'node-h2-labeled-spaced-v2': { type: 'neuron', label: 'a<sub>2</sub><sup>(1)</sup>', incomingLines: ['line-x1-h2-labeled-spaced-v2', 'line-x2-h2-labeled-spaced-v2'], outgoingLines: ['line-h2-o1-labeled-spaced-v2'], biasId: 'bias-h2-label-spaced-v2', biasArrowId: 'bias-h2-arrow-spaced-v2', description: 'Activation <code>a<sub>2</sub><sup>(1)</sup></code> of the second hidden neuron.' },
+                 'node-h3-labeled-spaced-v2': { type: 'neuron', label: 'a<sub>3</sub><sup>(1)</sup>', incomingLines: ['line-x1-h3-labeled-spaced-v2', 'line-x2-h3-labeled-spaced-v2'], outgoingLines: ['line-h3-o1-labeled-spaced-v2'], biasId: 'bias-h3-label-spaced-v2', biasArrowId: 'bias-h3-arrow-spaced-v2', description: 'Activation <code>a<sub>3</sub><sup>(1)</sup></code> of the third hidden neuron.' },
+                 'node-o1-labeled-spaced-v2': { type: 'neuron', label: 'a<sub>1</sub><sup>(2)</sup>', incomingLines: ['line-h1-o1-labeled-spaced-v2', 'line-h2-o1-labeled-spaced-v2', 'line-h3-o1-labeled-spaced-v2'], outgoingLines: [], biasId: 'bias-o1-label-spaced-v2', biasArrowId: 'bias-o1-arrow-spaced-v2', description: 'Activation <code>a<sub>1</sub><sup>(2)</sup></code> of the output neuron.' },
+
+                 // Biases (mapped by label ID)
+                 'bias-h1-label-spaced-v2': { type: 'bias', label: 'b<sub>1</sub><sup>(1)</sup>', targetNeuron: 'node-h1-labeled-spaced-v2', arrowId: 'bias-h1-arrow-spaced-v2', description: 'Bias for hidden neuron <code>a<sub>1</sub><sup>(1)</sup></code>.' },
+                 'bias-h2-label-spaced-v2': { type: 'bias', label: 'b<sub>2</sub><sup>(1)</sup>', targetNeuron: 'node-h2-labeled-spaced-v2', arrowId: 'bias-h2-arrow-spaced-v2', description: 'Bias for hidden neuron <code>a<sub>2</sub><sup>(1)</sup></code>.' },
+                 'bias-h3-label-spaced-v2': { type: 'bias', label: 'b<sub>3</sub><sup>(1)</sup>', targetNeuron: 'node-h3-labeled-spaced-v2', arrowId: 'bias-h3-arrow-spaced-v2', description: 'Bias for hidden neuron <code>a<sub>3</sub><sup>(1)</sup></code>.' },
+                 'bias-o1-label-spaced-v2': { type: 'bias', label: 'b<sub>1</sub><sup>(2)</sup>', targetNeuron: 'node-o1-labeled-spaced-v2', arrowId: 'bias-o1-arrow-spaced-v2', description: 'Bias for output neuron <code>a<sub>1</sub><sup>(2)</sup></code>.' },
+
+                 // Connections (mapped by line ID)
+                 'line-x1-h1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>11</sub><sup>(1)</sup>', source: 'node-x1-labeled-spaced-v2', target: 'node-h1-labeled-spaced-v2', weightLabelId: 'weight-x1-h1-label-spaced-v2', description: 'Weight from <code>x<sub>1</sub></code> to <code>a<sub>1</sub><sup>(1)</sup></code>.' },
+                 'line-x1-h2-labeled-spaced-v2': { type: 'connection', label: 'w<sub>12</sub><sup>(1)</sup>', source: 'node-x1-labeled-spaced-v2', target: 'node-h2-labeled-spaced-v2', weightLabelId: 'weight-x1-h2-label-spaced-v2', description: 'Weight from <code>x<sub>1</sub></code> to <code>a<sub>2</sub><sup>(1)</sup></code>.' },
+                 'line-x1-h3-labeled-spaced-v2': { type: 'connection', label: 'w<sub>13</sub><sup>(1)</sup>', source: 'node-x1-labeled-spaced-v2', target: 'node-h3-labeled-spaced-v2', weightLabelId: 'weight-x1-h3-label-spaced-v2', description: 'Weight from <code>x<sub>1</sub></code> to <code>a<sub>3</sub><sup>(1)</sup></code>.' },
+                 'line-x2-h1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>21</sub><sup>(1)</sup>', source: 'node-x2-labeled-spaced-v2', target: 'node-h1-labeled-spaced-v2', weightLabelId: 'weight-x2-h1-label-spaced-v2', description: 'Weight from <code>x<sub>2</sub></code> to <code>a<sub>1</sub><sup>(1)</sup></code>.' },
+                 'line-x2-h2-labeled-spaced-v2': { type: 'connection', label: 'w<sub>22</sub><sup>(1)</sup>', source: 'node-x2-labeled-spaced-v2', target: 'node-h2-labeled-spaced-v2', weightLabelId: 'weight-x2-h2-label-spaced-v2', description: 'Weight from <code>x<sub>2</sub></code> to <code>a<sub>2</sub><sup>(1)</sup></code>.' },
+                 'line-x2-h3-labeled-spaced-v2': { type: 'connection', label: 'w<sub>23</sub><sup>(1)</sup>', source: 'node-x2-labeled-spaced-v2', target: 'node-h3-labeled-spaced-v2', weightLabelId: 'weight-x2-h3-label-spaced-v2', description: 'Weight from <code>x<sub>2</sub></code> to <code>a<sub>3</sub><sup>(1)</sup></code>.' },
+                 'line-h1-o1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>11</sub><sup>(2)</sup>', source: 'node-h1-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h1-o1-label-spaced-v2', description: 'Weight from <code>a<sub>1</sub><sup>(1)</sup></code> to <code>a<sub>1</sub><sup>(2)</sup></code>.' },
+                 'line-h2-o1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>21</sub><sup>(2)</sup>', source: 'node-h2-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h2-o1-label-spaced-v2', description: 'Weight from <code>a<sub>2</sub><sup>(1)</sup></code> to <code>a<sub>1</sub><sup>(2)</sup></code>.' },
+                 'line-h3-o1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>31</sub><sup>(2)</sup>', source: 'node-h3-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h3-o1-label-spaced-v2', description: 'Weight from <code>a<sub>3</sub><sup>(1)</sup></code> to <code>a<sub>1</sub><sup>(2)</sup></code>.' },
+
+                  // Weights (mapped by label ID - link back to line)
+                 'weight-x1-h1-label-spaced-v2': { type: 'weight', connectionId: 'line-x1-h1-labeled-spaced-v2'},
+                 'weight-x1-h2-label-spaced-v2': { type: 'weight', connectionId: 'line-x1-h2-labeled-spaced-v2'},
+                 'weight-x1-h3-label-spaced-v2': { type: 'weight', connectionId: 'line-x1-h3-labeled-spaced-v2'},
+                 'weight-x2-h1-label-spaced-v2': { type: 'weight', connectionId: 'line-x2-h1-labeled-spaced-v2'},
+                 'weight-x2-h2-label-spaced-v2': { type: 'weight', connectionId: 'line-x2-h2-labeled-spaced-v2'},
+                 'weight-x2-h3-label-spaced-v2': { type: 'weight', connectionId: 'line-x2-h3-labeled-spaced-v2'},
+                 'weight-h1-o1-label-spaced-v2': { type: 'weight', connectionId: 'line-h1-o1-labeled-spaced-v2'},
+                 'weight-h2-o1-label-spaced-v2': { type: 'weight', connectionId: 'line-h2-o1-labeled-spaced-v2'},
+                 'weight-h3-o1-label-spaced-v2': { type: 'weight', connectionId: 'line-h3-o1-labeled-spaced-v2'},
+            };
+
+            let highlightedElements = [];
+
+            function getElement(id) { return svg.querySelector(`#${id}`); }
+
+            function addHighlight(elementId) { /* ... (same as before, using updated marker IDs) ... */
+                const element = getElement(elementId);
+                 if (element) {
+                     element.classList.add('highlight');
+                     const info = elementInfo[elementId] || {};
+                     if (element.tagName.toLowerCase() === 'line') {
+                         if (element.classList.contains('connection-line-ff')) { element.setAttribute('marker-end', highlightMarker); }
+                         else if (element.classList.contains('bias-arrow-ff')) { element.setAttribute('marker-end', highlightBiasMarker); }
+                     }
+                     highlightedElements.push(elementId);
+                 }
+            }
+
+             function clearAllHighlights() { /* ... (same as before, using updated marker IDs) ... */
+                 highlightedElements.forEach(id => {
+                     const element = getElement(id);
+                     if (element) {
+                         element.classList.remove('highlight');
+                         if (element.tagName.toLowerCase() === 'line') {
+                             if (element.classList.contains('connection-line-ff')) { element.setAttribute('marker-end', defaultMarker); }
+                             else if (element.classList.contains('bias-arrow-ff')) { element.setAttribute('marker-end', defaultBiasMarker); }
+                         }
+                     }
+                 });
+                 highlightedElements = [];
+            }
+
+             function handleInteraction(elementId) { /* ... (same as before, using updated IDs from elementInfo) ... */
+                 clearAllHighlights();
+                 let info = elementInfo[elementId];
+                 if (!info) return;
+                 let rootElementId = elementId;
+                 let rootInfo = info;
+                 if (info.type === 'weight' && info.connectionId) {
+                     rootElementId = info.connectionId;
+                     rootInfo = elementInfo[rootElementId];
+                     if (!rootInfo) return;
+                 }
+                 if (info.type === 'connection') {
+                     rootElementId = elementId;
+                     rootInfo = info;
+                 }
+                 let description = rootInfo.description || `Clicked: ${rootInfo.type} ${rootInfo.label || rootElementId}`;
+                 if (rootInfo.type === 'neuron') {
+                     addHighlight(rootElementId);
+                     if (rootInfo.biasId) addHighlight(rootInfo.biasId);
+                     if (rootInfo.biasArrowId) addHighlight(rootInfo.biasArrowId);
+                     if (rootInfo.incomingLines) rootInfo.incomingLines.forEach(id => { addHighlight(id); const lineInfo = elementInfo[id]; if (lineInfo && lineInfo.weightLabelId) addHighlight(lineInfo.weightLabelId); });
+                     if (rootInfo.outgoingLines) rootInfo.outgoingLines.forEach(id => { addHighlight(id); const lineInfo = elementInfo[id]; if (lineInfo && lineInfo.weightLabelId) addHighlight(lineInfo.weightLabelId); });
+                     description = `<strong>Activation:</strong> <code>${rootInfo.label}</code><br>${rootInfo.description}`;
+                 } else if (rootInfo.type === 'bias') {
+                     addHighlight(rootElementId);
+                     if (rootInfo.arrowId) addHighlight(rootInfo.arrowId);
+                     if (rootInfo.targetNeuron) addHighlight(rootInfo.targetNeuron);
+                     description = `<strong>Bias:</strong> <code>${rootInfo.label}</code><br>${rootInfo.description}`;
+                 } else if (rootInfo.type === 'connection') {
+                     addHighlight(rootElementId);
+                     if (rootInfo.weightLabelId) addHighlight(rootInfo.weightLabelId);
+                     if (rootInfo.source) addHighlight(rootInfo.source);
+                     if (rootInfo.target) addHighlight(rootInfo.target);
+                     description = `<strong>Weight:</strong> <code>${rootInfo.label}</code><br>${rootInfo.description}`;
+                 }
+                 descriptionEl.innerHTML = description;
+            }
+
+             interactiveElements.forEach(element => { /* ... (same event listener logic as before) ... */
+                 element.addEventListener('click', (event) => {
+                     event.stopPropagation();
+                     let targetId = element.id;
+                     if (element.classList.contains('connection-click-target')) { targetId = element.dataset.targetline; }
+                     if (!targetId && element.parentElement.id && elementInfo[element.parentElement.id]) { targetId = element.parentElement.id; }
+                     if (targetId && elementInfo[targetId]) { handleInteraction(targetId); }
+                 });
+            });
+
+             svg.addEventListener('click', (event) => { /* ... (same event listener logic as before) ... */
+                  if (event.target === svg || !event.target.closest('.interactive-element')) {
+                      clearAllHighlights();
+                      descriptionEl.innerHTML = 'Click on a neuron, connection line, weight (w), or bias (b) label to learn more.';
+                  }
+             });
+
+             descriptionEl.innerHTML = 'Click on a neuron, connection line, weight (w), or bias (b) label to learn more.';
+
+        })();
+    </script>
+
+</div>
+<!-- End: Interactive Network Diagram Navigator (Labeled - Spaced v2) -->
+        <p>Use the interactive diagram above to get comfortable with the notation. Understanding where each weight and bias belongs is crucial for the next step: calculating the activations for a whole layer efficiently using matrices.</p>
+        <div class="continue-button" onclick="showNextSection(15)">Continue</div>
+    </section>
+
+    <section id="section15">
+    <h2>Lesson Recap</h2>
+    <p>Fantastic! We've now assembled neurons into networks:</p>
+    <ul>
+        <li><strong>Layers:</strong> Networks are organized into Input, Hidden, and Output layers.</li>
+        <li><strong>Feedforward:</strong> Information flows one way, from input to output.</li>
+        <li><strong>Fully Connected:</strong> Often, all neurons in adjacent layers are connected.</li>
+        <li><strong>Depth:</strong> Networks can have multiple hidden layers, enabling hierarchical feature learning.</li>
+        <li><strong>Notation:</strong> We established notation \(\ a_j^{(l)}\), \(\ w_{ij}^{(l)}\), \(\ b_j^{(l)}\) to precisely describe network components.</li>
+    </ul>
+    <div class="test-your-knowledge">
+        <h3>Test Your Knowledge</h3>
+        <h4>In the notation \(\ w_{34}^{(2)}\), what does the superscript \(\ (2)\) indicate?</h4>
+        <div id="option1" class="option-container" onclick="checkAnswer(1, false)">
+            <p>The weight connects to the 2nd neuron in layer 3.</p>
+            <div id="feedback1" class="option-feedback incorrect-feedback">
+                <p>The superscript indicates the destination layer.</p>
+            </div>
+        </div>
+        <div id="option2" class="option-container" onclick="checkAnswer(2, false)">
+            <p>The weight connects from the 2nd neuron in layer 1.</p>
+            <div id="feedback2" class="option-feedback incorrect-feedback">
+                <p>The superscript indicates the destination layer, and the subscripts indicate source and destination neurons.</p>
+            </div>
+        </div>
+        <div id="option3" class="option-container" onclick="checkAnswer(3, true)">
+            <p>This weight is part of the calculations for Layer 2 (connecting Layer 1 to Layer 2).</p>
+            <div id="feedback3" class="option-feedback correct-feedback">
+                <p>Correct! The superscript \(\ l\) in \(\ w_{ij}^{(l)}\) denotes the layer that the weight connects <em>into</em> (the destination layer), meaning it connects layer \(\ l - 1\) to layer \(\ l\).</p>
+            </div>
+        </div>
+        <div id="option4" class="option-container" onclick="checkAnswer(4, false)">
+            <p>This is the weight for the 2nd input feature overall.</p>
+            <div id="feedback4" class="option-feedback incorrect-feedback">
+                <p>The notation refers to connections between neurons in specific layers, not overall input features.</p>
+            </div>
+        </div>
+    </div>
+    <p>Connecting neurons is the first step. Next, we'll learn how to use the power of linear algebra (matrices!) to perform the calculations for entire layers efficiently.</p>
+</section>
+
+
+    <script>
+        // Show the first section initially
+        document.getElementById("section1").style.display = "block";
+        document.getElementById("section1").style.opacity = "1";
+
+        function showNextSection(nextSectionId) {
+            const currentButton = event.target;
+            const nextSection = document.getElementById("section" + nextSectionId);
+            
+            currentButton.style.display = "none";
+            
+            nextSection.style.display = "block";
+            setTimeout(() => {
+                nextSection.style.opacity = "1";
+            }, 10);
+
+            setTimeout(() => {
+                nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 500);
+        }
+
+        function revealAnswer(id) {
+            const revealText = document.getElementById(id);
+            const revealButton = event.target;
+            
+            revealText.style.display = "block";
+            revealButton.style.display = "none";
+        }
+
+        function checkAnswer(optionNumber, isCorrect) {
+            // Hide all feedback first
+            document.querySelectorAll('.option-feedback').forEach(feedback => {
+                feedback.style.display = 'none';
+            });
+            
+            // Show the feedback for the selected option
+            const feedback = document.getElementById('feedback' + optionNumber);
+            feedback.style.display = 'block';
+            
+            // Highlight the correct answer
+            if (isCorrect) {
+                document.getElementById('option' + optionNumber).style.backgroundColor = '#d4edda';
+            } else {
+                document.getElementById('option' + optionNumber).style.backgroundColor = '#f8d7da';
+                document.getElementById('option3').style.backgroundColor = '#d4edda';
+            }
+        }
+    </script>
+</body>
+</html>
