@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de"> <!-- Language set to German -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Building Networks - Layers and Feedforward Structure</title>
+    <!-- Title translated -->
+    <title>Netzwerke bauen – Schichten und Feedforward-Struktur</title>
     <style>
+        /* CSS remains the same */
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
@@ -151,11 +153,15 @@
         .math-explainer {
             background-color: #f5f5f5;
             border-left: 4px solid #007bff;
+            padding: 20px; /* Added padding */
+            border-radius: 8px; /* Added radius */
+            margin-top: 20px; /* Added margin */
         }
         .math-explainer h3 {
             color: #007bff;
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            font-size: 0.75em; /* Adjusted size */
+            margin-bottom: 5px;
+            margin-top: 5px;
         }
         .math-step {
             margin-bottom: 10px;
@@ -170,6 +176,7 @@
             font-style: italic;
             margin-top: 10px;
             color: #666;
+            font-size: 0.9em; /* Slightly smaller note */
         }
         .option-container {
             margin-bottom: 15px;
@@ -195,6 +202,10 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+         /* Style for inline MathJax */
+         mjx-container {
+            display: inline !important; /* Ensure MathJax behaves inline */
+         }
     </style>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -202,23 +213,26 @@
 <body>
     <section id="section1">
         <div class="image-placeholder">
-            <img src="images/2.png?height=300&width=600" alt="Image shows several individual neuron icons being connected together to form layers in a network structure.">
+            <!-- Alt text translated -->
+            <img src="images/2.png?height=300&width=600" alt="Bild zeigt mehrere einzelne Neuron-Icons, die zu Schichten in einer Netzwerkstruktur verbunden werden.">
         </div>
-        <h1>Building Networks: Layers and Feedforward Structure</h1>
-        <p>We've met the artificial neuron, our basic processing unit. But like in the brain, the real power comes from connecting many neurons together. How do we organize them? We arrange them in <strong>layers</strong>.</p>
-        <div class="continue-button" onclick="showNextSection(2)">Continue</div>
+        <!-- Header and paragraph translated -->
+        <h1>Netzwerke bauen: Schichten und Feedforward-Struktur</h1>
+        <p>Wir haben das künstliche Neuron kennengelernt, unsere grundlegende Verarbeitungseinheit. Aber wie im Gehirn entsteht die wahre Stärke erst durch die Verbindung vieler Neuronen. Wie organisieren wir sie? Wir ordnen sie in <strong>Schichten</strong> (Layers) an.</p>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(2)">Weiter</div>
     </section>
 
     <section id="section2">
-        <h2>The Layered Architecture</h2>
-        <p>Think of a typical feedforward neural network like a processing pipeline organized into distinct layers.</p>
+        <!-- Header and paragraph translated -->
+        <h2>Die Schicht-Architektur</h2>
+        <p>Stell dir ein typisches Feedforward-Neuronales Netz wie eine Verarbeitungspipeline vor, die in einzelne Schichten organisiert ist.</p>
         <!-- Start: Simple Feedforward Network Diagram -->
 <div id="feedforward-diagram">
 
     <style>
-        /* Scoped styles for the Feedforward Network Diagram */
+        /* Scoped styles for the Feedforward Network Diagram - Unchanged */
         #feedforward-diagram {
-            /* font-family: Arial, sans-serif; /* Use parent style */
             padding: 20px 10px;
             background-color: #ffffff;
             font-size: 100%;
@@ -276,12 +290,12 @@
             </marker>
         </defs>
 
-         <!-- Layer Labels -->
-         <text class="layer-label-ff" x="50" y="20">Input Layer (L=0)</text>
-         <text class="layer-label-ff" x="200" y="20">Hidden Layer (L=1)</text>
-         <text class="layer-label-ff" x="350" y="20">Output Layer (L=2)</text>
+         <!-- Layer Labels Translated -->
+         <text class="layer-label-ff" x="30" y="0">Eingabe-Schicht (L=0)</text>
+         <text class="layer-label-ff" x="200" y="0">Versteckte Schicht (L=1)</text>
+         <text class="layer-label-ff" x="370" y="0">Ausgabe-Schicht (L=2)</text>
 
-         <!-- Layer 0: Inputs -->
+         <!-- Layer 0: Inputs - Symbolic text, no change needed -->
          <g id="input-layer-ff">
             <circle class="ff-node input-node-ff" cx="50" cy="80" r="15"/>
             <text class="label-text-ff" x="50" y="80">x<tspan class="subscript">1</tspan></text>
@@ -290,7 +304,7 @@
              <text class="label-text-ff" x="50" y="170">x<tspan class="subscript">2</tspan></text>
          </g>
 
-         <!-- Layer 1: Hidden -->
+         <!-- Layer 1: Hidden - Symbolic text, no change needed -->
          <g id="hidden-layer-ff">
             <circle class="ff-node hidden-node-ff" cx="200" cy="50" r="15"/>
              <text class="label-text-ff" x="200" y="50">a<tspan class="subscript">1</tspan><tspan class="superscript">(1)</tspan></text>
@@ -302,15 +316,13 @@
              <text class="label-text-ff" x="200" y="200">a<tspan class="subscript">3</tspan><tspan class="superscript">(1)</tspan></text>
          </g>
 
-         <!-- Layer 2: Output -->
+         <!-- Layer 2: Output - Symbolic text, no change needed -->
          <g id="output-layer-ff">
             <circle class="ff-node output-node-ff" cx="350" cy="125" r="15"/>
             <text class="label-text-ff" x="350" y="125">a<tspan class="subscript">1</tspan><tspan class="superscript">(2)</tspan></text>
-            <!-- Alternate label -->
-            <!-- <text class="label-text-ff" x="350" y="125">y</text> -->
          </g>
 
-        <!-- Connections -->
+        <!-- Connections - No text, no change needed -->
         <g id="connections-ff">
             <!-- Layer 0 -> Layer 1 -->
             <line class="connection-line-ff" x1="65" y1="80" x2="185" y2="50" marker-end="url(#arrowhead-ann-ff)"/>
@@ -331,36 +343,46 @@
 
 </div>
 <!-- End: Simple Feedforward Network Diagram -->
- <div class="continue-button" onclick="showNextSection(3)">Continue</div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(3)">Weiter</div>
     </section>
 
     <section id="section3">
-        <p>Let's look at the main types of layers:</p>
+        <!-- Paragraph translated -->
+        <p>Schauen wir uns die Haupttypen von Schichten an:</p>
         <div class="vocab-section">
-            <h3>Build Your Vocab</h3>
-            <h4 class="vocab-term">Input Layer</h4>
-            <p>The first layer of a neural network that receives the raw input data (features). It typically doesn't perform any computation, just passes the data to the first hidden layer.</p>
-            <h4 class="vocab-term">Hidden Layer(s)</h4>
-            <p>Layers situated between the input and output layers. Neurons in hidden layers perform computations (weighted sum + activation) and learn intermediate representations of the data. Networks can have zero, one, or many hidden layers.</p>
-            <h4 class="vocab-term">Output Layer</h4>
-            <p>The final layer of the network that produces the desired output, such as class probabilities for classification or a continuous value for regression.</p>
+            <!-- Vocab H3 translated -->
+            <h3>Erweiter deinen Wortschatz</h3>
+            <!-- Vocab Term and Definition translated -->
+            <h4 class="vocab-term">Eingabe-Schicht (Input Layer)</h4>
+            <p>Die erste Schicht eines neuronalen Netzes, die die rohen Eingabedaten (Merkmale) empfängt. Sie führt typischerweise keine Berechnungen durch, sondern leitet die Daten nur an die erste versteckte Schicht weiter.</p>
+            <!-- Vocab Term and Definition translated -->
+            <h4 class="vocab-term">Versteckte Schicht(en) (Hidden Layer(s))</h4>
+            <p>Schichten, die sich zwischen der Eingabe- und Ausgabeschicht befinden. Neuronen in versteckten Schichten führen Berechnungen durch (gewichtete Summe + Aktivierung) und lernen Zwischenrepräsentationen der Daten. Netzwerke können keine, eine oder viele versteckte Schichten haben.</p>
+            <!-- Vocab Term and Definition translated -->
+            <h4 class="vocab-term">Ausgabe-Schicht (Output Layer)</h4>
+            <p>Die letzte Schicht des Netzwerks, die die gewünschte Ausgabe erzeugt, z. B. Klassenwahrscheinlichkeiten für Klassifizierung oder einen kontinuierlichen Wert für Regression.</p>
         </div>
- <div class="continue-button" onclick="showNextSection(4)">Continue</div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(4)">Weiter</div>
     </section>
 
     <section id="section4">
-        <p>The number of neurons in each layer, and the number of hidden layers, are important design choices that define the network's <strong>architecture</strong>.</p>
-        <div class="continue-button" onclick="showNextSection(5)">Continue</div>
+        <!-- Paragraph translated -->
+        <p>Die Anzahl der Neuronen in jeder Schicht und die Anzahl der versteckten Schichten sind wichtige Designentscheidungen, die die <strong>Architektur</strong> des Netzwerks definieren.</p>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(5)">Weiter</div>
     </section>
 
     <section id="section5">
-        <h2>Feedforward Flow</h2>
-        <p>Notice the direction of the arrows in our network diagram?</p>
+        <!-- Header and paragraph translated -->
+        <h2>Der Feedforward-Fluss</h2>
+        <p>Ist dir die Richtung der Pfeile in unserem Netzwerkdiagramm aufgefallen?</p>
         <!-- Start: Animated Feedforward Network Diagram -->
 <div id="feedforward-diagram-animated">
 
     <style>
-        /* Scoped styles for the Animated Feedforward Network Diagram */
+        /* Scoped styles for the Animated Feedforward Network Diagram - Unchanged */
         #feedforward-diagram-animated {
             padding: 20px 10px;
             background-color: #ffffff;
@@ -447,10 +469,10 @@
             </marker>
         </defs>
 
-         <!-- Layer Labels -->
-         <text class="layer-label-ff" x="50" y="20">Input Layer (L=0)</text>
-         <text class="layer-label-ff" x="200" y="20">Hidden Layer (L=1)</text>
-         <text class="layer-label-ff" x="350" y="20">Output Layer (L=2)</text>
+         <!-- Layer Labels Translated -->
+         <text class="layer-label-ff" x="30" y="0">Eingabe-Schicht (L=0)</text>
+         <text class="layer-label-ff" x="200" y="0">Versteckte Schicht (L=1)</text>
+         <text class="layer-label-ff" x="370" y="0">Ausgabe-Schicht (L=2)</text>
 
          <!-- Layer 0: Inputs -->
          <g id="input-layer-ff-animated">
@@ -497,6 +519,7 @@
     </svg>
 
     <script>
+        // JS Logic for animation remains the same
         (function() {
             const container = document.getElementById('feedforward-diagram-animated');
             if (!container) return;
@@ -566,31 +589,39 @@
 
 </div>
 <!-- End: Animated Feedforward Network Diagram -->
- <div class="continue-button" onclick="showNextSection(6)">Continue</div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(6)">Weiter</div>
     </section>
 
     <section id="section6">
-        <p>Information travels in one direction: from the input layer, through the hidden layer(s), to the output layer. There are no connections that loop back or skip layers in this basic type of network. That's why they are called <strong>Feedforward Neural Networks</strong>.</p>
- <div class="continue-button" onclick="showNextSection(7)">Continue</div>
+        <!-- Paragraph translated -->
+        <p>Informationen fließen in eine Richtung: von der Eingabeschicht über die versteckte(n) Schicht(en) zur Ausgabeschicht. Es gibt keine Verbindungen, die Schleifen bilden oder Schichten überspringen, in diesem grundlegenden Netzwerktyp. Deshalb nennt man sie <strong>Feedforward Neuronale Netze</strong>.</p>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(7)">Weiter</div>
     </section>
 
     <section id="section7">
         <div class="faq-section">
-            <h3>Frequently Asked Questions</h3>
-            <h4>Are there networks where information <em>does</em> loop back?</h4>
-            <p>Yes! Networks with feedback connections or loops are called Recurrent Neural Networks (RNNs). They are particularly useful for processing sequential data like text or time series, where information from previous steps needs to influence current processing. We mentioned LSTMs in Lesson 1 - those are a sophisticated type of RNN. But for now, we're focusing on the simpler feedforward structure.</p>
+            <!-- FAQ Header translated -->
+            <h3>Häufig gestellte Fragen (FAQ)</h3>
+            <!-- FAQ Question translated -->
+            <h4>Gibt es Netzwerke, in denen Informationen <em>tatsächlich</em> zurückfließen?</h4>
+            <!-- FAQ Answer translated -->
+            <p>Ja! Netzwerke mit Rückkopplungsverbindungen oder Schleifen werden Rekurrente Neuronale Netze (RNNs) genannt. Sie sind besonders nützlich für die Verarbeitung sequenzieller Daten wie Text oder Zeitreihen, bei denen Informationen aus früheren Schritten die aktuelle Verarbeitung beeinflussen müssen. Wir haben LSTMs in Lektion 1 erwähnt – das ist ein ausgefeilter Typ von RNN. Aber fürs Erste konzentrieren wir uns auf die einfachere Feedforward-Struktur.</p>
         </div>
-        <div class="continue-button" onclick="showNextSection(8)">Continue</div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(8)">Weiter</div>
     </section>
 
     <section id="section8">
-        <h2>Fully Connected Layers</h2>
-        <p>Another common feature in these layered networks is how neurons are connected between adjacent layers.</p>
+        <!-- Header and paragraph translated -->
+        <h2>Voll verbundene Schichten</h2>
+        <p>Ein weiteres gemeinsames Merkmal in diesen geschichteten Netzwerken ist, wie Neuronen zwischen benachbarten Schichten verbunden sind.</p>
         <!-- Start: Animated Feedforward Network Diagram (Specific Sequence) -->
 <div id="feedforward-diagram-animated-seq">
 
     <style>
-        /* Scoped styles for the Animated Feedforward Network Diagram (Specific Sequence) */
+        /* Scoped styles for the Animated Feedforward Network Diagram (Specific Sequence) - Unchanged */
         #feedforward-diagram-animated-seq {
             padding: 20px 10px;
             background-color: #ffffff;
@@ -670,10 +701,10 @@
             </marker>
         </defs>
 
-         <!-- Layer Labels -->
-         <text class="layer-label-ff" x="50" y="20">Input Layer (L=0)</text>
-         <text class="layer-label-ff" x="200" y="20">Hidden Layer (L=1)</text>
-         <text class="layer-label-ff" x="350" y="20">Output Layer (L=2)</text>
+         <!-- Layer Labels Translated -->
+         <text class="layer-label-ff" x="30" y="0">Eingabe-Schicht (L=0)</text>
+         <text class="layer-label-ff" x="200" y="0">Versteckte Schicht (L=1)</text>
+         <text class="layer-label-ff" x="370" y="0">Ausgabe-Schicht (L=2)</text>
 
          <!-- Layer 0: Inputs -->
          <g id="input-layer-ff-animated-seq">
@@ -722,6 +753,7 @@
     </svg>
 
     <script>
+        // JS Logic for animation remains the same
         (function() {
             const container = document.getElementById('feedforward-diagram-animated-seq');
             if (!container) return;
@@ -810,31 +842,38 @@
 
 </div>
 <!-- End: Animated Feedforward Network Diagram (Specific Sequence) -->
- <div class="continue-button" onclick="showNextSection(9)">Continue</div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(9)">Weiter</div>
     </section>
 
     <section id="section9">
-        <p>When every neuron in layer <code>l-1</code> is connected to every neuron in layer <code>l</code>, we call these <strong>fully connected layers</strong> (or sometimes 'dense' layers). This is a very common connection pattern, especially in simpler feedforward networks or parts of more complex ones.</p>
- <div class="continue-button" onclick="showNextSection(10)">Continue</div>
+        <!-- Paragraph translated -->
+        <p>Wenn jedes Neuron in Schicht \(l-1\) mit jedem Neuron in Schicht \(l\) verbunden ist, nennen wir diese <strong>voll verbundene Schichten</strong> (oder manchmal 'dense' Layers). Dies ist ein sehr verbreitetes Verbindungsmuster, besonders in einfacheren Feedforward-Netzwerken oder Teilen komplexerer Architekturen.</p>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(10)">Weiter</div>
     </section>
 
     <section id="section10">
         <div class="vocab-section">
-            <h3>Build Your Vocab</h3>
-            <h4 class="vocab-term">Fully Connected Layer</h4>
-            <p>A layer in a neural network where each neuron receives input from <em>every</em> neuron in the previous layer.</p>
+            <!-- Vocab H3 translated -->
+            <h3>Erweiter deinen Wortschatz</h3>
+            <!-- Vocab Term and Definition translated -->
+            <h4 class="vocab-term">Voll verbundene Schicht (Fully Connected Layer)</h4>
+            <p>Eine Schicht in einem neuronalen Netz, in der jedes Neuron Eingaben von <em>jedem</em> Neuron der vorherigen Schicht erhält.</p>
         </div>
-        <div class="continue-button" onclick="showNextSection(11)">Continue</div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(11)">Weiter</div>
     </section>
 
     <section id="section11">
-        <h2>Deeper Networks</h2>
-        <p>We're not limited to just one hidden layer. We can stack multiple hidden layers to create <strong>deep neural networks</strong>.</p>
+        <!-- Header and paragraph translated -->
+        <h2>Tiefere Netzwerke</h2>
+        <p>Wir sind nicht auf nur eine versteckte Schicht beschränkt. Wir können mehrere versteckte Schichten stapeln, um <strong>tiefe neuronale Netze</strong> (Deep Neural Networks) zu erstellen.</p>
         <!-- Start: Deeper Feedforward Network Diagram -->
 <div id="deep-feedforward-diagram">
 
     <style>
-        /* Scoped styles for the Deeper Feedforward Network Diagram */
+        /* Scoped styles for the Deeper Feedforward Network Diagram - Unchanged */
         #deep-feedforward-diagram {
             padding: 20px 10px;
             background-color: #ffffff;
@@ -897,16 +936,17 @@
 
         <!-- Constants for horizontal positioning -->
         <script>
+            // JS constants unchanged
             const LAYER_X = [50, 175, 300, 425, 550]; // X coordinates for layers 0-4
             const NODE_RADIUS = 12; // Smaller radius for deeper net
         </script>
 
-         <!-- Layer Labels -->
-         <text class="layer-label-ff" x="50" y="10">Input Layer (L=0)</text>
-         <text class="layer-label-ff" x="175" y="10">Hidden 1 (L=1)</text>
-         <text class="layer-label-ff" x="300" y="10">Hidden 2 (L=2)</text>
-         <text class="layer-label-ff" x="425" y="10">Hidden 3 (L=3)</text>
-         <text class="layer-label-ff" x="550" y="10">Output Layer (L=4)</text>
+         <!-- Layer Labels Translated -->
+         <text class="layer-label-ff" x="50" y="10">Eingabe (L=0)</text>
+         <text class="layer-label-ff" x="175" y="10">Verst. 1 (L=1)</text>
+         <text class="layer-label-ff" x="300" y="10">Verst. 2 (L=2)</text>
+         <text class="layer-label-ff" x="425" y="10">Verst. 3 (L=3)</text>
+         <text class="layer-label-ff" x="550" y="10">Ausgabe (L=4)</text>
 
          <!-- Layer 0: Inputs (2 nodes) -->
          <g id="input-layer-deep-ff">
@@ -940,7 +980,7 @@
             <text class="label-text-ff" x="550" y="125">a<tspan class="subscript">1</tspan><tspan class="superscript">(4)</tspan></text>
          </g>
 
-        <!-- Connections -->
+        <!-- Connections - No text, no change needed -->
         <g id="connections-deep-ff">
             <!-- L0 -> L1 -->
             <line class="connection-line-ff" x1="62" y1="85" x2="163" y2="60" marker-end="url(#arrowhead-ann-deep-ff)"/>
@@ -978,44 +1018,62 @@
 
 </div>
 <!-- End: Deeper Feedforward Network Diagram -->
- <div class="continue-button" onclick="showNextSection(12)">Continue</div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(12)">Weiter</div>
     </section>
 
     <section id="section12">
-        <p>Having multiple hidden layers allows the network to learn features hierarchically. Early layers might learn simple patterns from the input, while later layers combine those simple patterns to detect more complex concepts. This capability is a key reason for the success of deep learning.</p>
- <div class="continue-button" onclick="showNextSection(13)">Continue</div>
+        <!-- Paragraph translated -->
+        <p>Mehrere versteckte Schichten ermöglichen es dem Netzwerk, Merkmale hierarchisch zu lernen. Frühe Schichten könnten einfache Muster aus der Eingabe lernen, während spätere Schichten diese einfachen Muster kombinieren, um komplexere Konzepte zu erkennen. Diese Fähigkeit ist ein Schlüsselgrund für den Erfolg des Deep Learning.</p>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(13)">Weiter</div>
     </section>
 
     <section id="section13">
         <div class="why-it-matters">
-            <h3>Why It Matters</h3>
-            <p>The depth of a network (number of layers) is a crucial aspect of its architecture. Deeper networks can often learn more complex functions more efficiently than shallow networks with the same number of total neurons, although they can also be harder to train.</p>
+            <!-- Header translated -->
+            <h3>Warum ist das wichtig?</h3>
+            <!-- Paragraph translated -->
+            <p>Die Tiefe eines Netzwerks (Anzahl der Schichten) ist ein entscheidender Aspekt seiner Architektur. Tiefere Netzwerke können oft komplexere Funktionen effizienter lernen als flache Netzwerke mit der gleichen Gesamtzahl an Neuronen, obwohl sie auch schwieriger zu trainieren sein können.</p>
         </div>
-        <div class="continue-button" onclick="showNextSection(14)">Continue</div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(14)">Weiter</div>
     </section>
 
     <section id="section14">
-        <h2>Notation for Networks</h2>
-        <p>As networks get bigger, we need precise notation to keep track of everything.</p>
-        <p>Let's refine the notation we introduced for a single neuron:</p>
+        <!-- Header and paragraphs translated -->
+        <h2>Notation für Netzwerke</h2>
+        <p>Da Netzwerke größer werden, brauchen wir eine präzise Notation, um den Überblick zu behalten.</p>
+        <p>Verfeinern wir die Notation, die wir für ein einzelnes Neuron eingeführt haben:</p>
         <div class="math-explainer">
-    <h3>Network Notation</h3>
-    <div class="math-step">
-        <span class="math-step-number">1.</span> We number layers starting from \(l = 0\) for the input layer.
-    </div>
-    <div class="math-step">
-        <span class="math-step-number">2.</span> \(a_j^{(l)}\): Represents the <strong>activation</strong> (output) of the \(j\)-th neuron in layer \(l\).
-    </div>
-    <div class="math-step">
-        <span class="math-step-number">3.</span> \(b_j^{(l)}\): Represents the <strong>bias</strong> of the \(j\)-th neuron in layer \(l\).
-    </div>
-    <div class="math-step">
-        <span class="math-step-number">4.</span> \(w_{ij}^{(l)}\): Represents the <strong>weight</strong> of the connection <em>from</em> neuron \(i\) in the <em>previous</em> layer (\(l - 1\)) <em>to</em> neuron \(j\) in the <em>current</em> layer (\(l\)).
-    </div>
-    <div class="math-note">
-        Pay close attention to the indices for the weight \(w_{ij}^{(l)}\): \(i\) is the index in the <em>source</em> layer (\(l - 1\)), \(j\) is the index in the <em>destination</em> layer (\(l\)), and \(l\) refers to the layer the weight <em>goes into</em>.
-    </div>
-</div>
+            <!-- Header translated -->
+            <h3>Netzwerk-Notation</h3>
+            <!-- Math steps translated, LaTeX kept -->
+            <div class="math-step">
+                <span class="math-step-number">1.</span> Wir nummerieren die Schichten beginnend mit \(l = 0\) für die Eingabeschicht.
+            </div>
+            <div class="math-step">
+                <span class="math-step-number">2.</span> \(a_j^{(l)}\): Repräsentiert die <strong>Aktivierung</strong> (Ausgabe) des \(j\)-ten Neurons in Schicht \(l\).
+            </div>
+            <div class="math-step">
+                <span class="math-step-number">3.</span> \(b_j^{(l)}\): Repräsentiert den <strong>Bias</strong> des \(j\)-ten Neurons in Schicht \(l\).
+            </div>
+            <div class="math-step">
+                <span class="math-step-number">4.</span> \(w_{ij}^{(l)}\): Repräsentiert das <strong>Gewicht</strong> der Verbindung <em>vom</em> Neuron \(i\) in der <em>vorherigen</em> Schicht (\(l - 1\)) <em>zum</em> Neuron \(j\) in der <em>aktuellen</em> Schicht (\(l\)).
+            </div>
+            <!-- Math note translated -->
+            <div class="math-note">
+                Achte genau auf die Indizes für das Gewicht \(w_{ij}^{(l)}\): \(i\) ist der Index in der <em>Quell</em>-Schicht (\(l - 1\)), \(j\) ist der Index in der <em>Ziel</em>-Schicht (\(l\)), und \(l\) bezieht sich auf die Schicht, in die das Gewicht <em>hineingeht</em>.
+            </div>
+        </div>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(15)">Weiter</div>
+    </section>
+
+    <section id="section15">
+<!-- Paragraph translated -->
+        <p>Nutze das interaktive Diagramm, um dich mit der Notation vertraut zu machen. Zu verstehen, wohin jedes Gewicht und jeder Bias gehört, ist entscheidend für den nächsten Schritt: die effiziente Berechnung der Aktivierungen für eine ganze Schicht mithilfe von Matrizen.</p>
+        <!-- Button text translated -->
 
         <!-- Start: Interactive Network Diagram Navigator (Labeled - Spaced v2) -->
 <div id="interactive-ann-navigator-labeled-spaced-v2">
@@ -1046,11 +1104,19 @@
         #interactive-ann-navigator-labeled-spaced-v2 .subscript { font-size: 0.7em; baseline-shift: sub; }
         #interactive-ann-navigator-labeled-spaced-v2 .superscript { font-size: 0.7em; baseline-shift: super; }
         #interactive-ann-navigator-labeled-spaced-v2 .weight-label-ff,
-        #interactive-ann-navigator-labeled-spaced-v2 .bias-label-ff { font-size: 10px; font-family: 'Times New Roman', Times, serif; font-style: italic; fill: #546e7a; text-anchor: middle; transition: fill 0.2s ease, font-weight 0.2s ease; }
+        #interactive-ann-navigator-labeled-spaced-v2 .bias-label-ff { font-size: 10px; font-family: 'Times New Roman', Times, serif; font-style: italic; fill: #546e7a; text-anchor: middle; transition: fill 0.2s ease, font-weight 0.2s ease; cursor: pointer; } /* Added cursor */
         #interactive-ann-navigator-labeled-spaced-v2 .bias-label-ff { dominant-baseline: auto; }
         #interactive-ann-navigator-labeled-spaced-v2 #description-interactive-ann-labeled-spaced-v2 { padding: 15px 20px; margin: 0 15px 15px 15px; background-color: #f8f9fa; border-radius: 5px; min-height: 3em; text-align: left; color: #444; line-height: 1.6; font-size: 1em; transition: background-color 0.3s ease; }
         #interactive-ann-navigator-labeled-spaced-v2 #description-interactive-ann-labeled-spaced-v2 strong { color: #333; font-weight: bold; }
-        #interactive-ann-navigator-labeled-spaced-v2 #description-interactive-ann-labeled-spaced-v2 code { background-color: #e9ecef; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; font-size: 0.95em;}
+         /* MathJax Code Style */
+        #interactive-ann-navigator-labeled-spaced-v2 #description-interactive-ann-labeled-spaced-v2 mjx-container[jax="CHTML"] {
+            font-family: monospace !important; /* Use monospace font */
+            background-color: #e9ecef;
+            padding: 0.1em 0.4em;
+            border-radius: 3px;
+            font-size: 0.95em; /* Match original code size */
+            display: inline !important; /* Ensure it stays inline */
+        }
     </style>
 
     <svg id="ann-svg-interactive-labeled-spaced-v2" viewBox="0 0 400 270">
@@ -1062,10 +1128,10 @@
              <marker id="arrowhead-bias-spaced-v2-highlight" class="marker-bias-arrow-highlight" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="strokeWidth" markerWidth="5" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" /></marker>
         </defs>
 
-         <!-- Layer Labels -->
-         <text class="layer-label-ff" x="50" y="10">Input (L=0)</text>
-         <text class="layer-label-ff" x="200" y="10">Hidden (L=1)</text>
-         <text class="layer-label-ff" x="350" y="10">Output (L=2)</text>
+         <!-- Layer Labels Translated -->
+         <text class="layer-label-ff" x="30" y="0">Eingabe-Schicht (L=0)</text>
+         <text class="layer-label-ff" x="200" y="0">Versteckte Schicht (L=1)</text>
+         <text class="layer-label-ff" x="370" y="0">Ausgabe-Schicht (L=2)</text>
 
          <!-- Layer 0: Inputs -->
          <g id="input-layer-interactive-labeled-spaced-v2">
@@ -1141,51 +1207,51 @@
         </g>
     </svg>
 
-    <!-- Description Area -->
-    <div id="description-interactive-ann-labeled-spaced-v2">Click on a neuron, connection line, weight (w), or bias (b) label to learn more.</div>
+    <!-- Description Area (default text translated) -->
+    <div id="description-interactive-ann-labeled-spaced-v2">Klicke auf ein Neuron, eine Verbindungslinie, ein Gewicht (w) oder eine Bias (b)-Beschriftung, um mehr zu erfahren.</div>
 
     <script>
-        // Script remains the same - just ensure IDs match the updated SVG
+        // JS with translated descriptions and default text
         (function() {
-            const container = document.getElementById('interactive-ann-navigator-labeled-spaced-v2'); // *** Updated container ID ***
+            const container = document.getElementById('interactive-ann-navigator-labeled-spaced-v2');
             if (!container) return;
 
-            const svg = container.querySelector('#ann-svg-interactive-labeled-spaced-v2'); // *** Updated SVG ID ***
-            const descriptionEl = container.querySelector('#description-interactive-ann-labeled-spaced-v2'); // *** Updated Desc ID ***
+            const svg = container.querySelector('#ann-svg-interactive-labeled-spaced-v2');
+            const descriptionEl = container.querySelector('#description-interactive-ann-labeled-spaced-v2');
             const interactiveElements = container.querySelectorAll('.interactive-element');
 
-            // Marker URLs (update based on new IDs in SVG defs)
+            // Marker URLs
             const defaultMarker = 'url(#arrowhead-labeled-spaced-v2-default)';
             const highlightMarker = 'url(#arrowhead-labeled-spaced-v2-highlight)';
             const defaultBiasMarker = 'url(#arrowhead-bias-spaced-v2-default)';
             const highlightBiasMarker = 'url(#arrowhead-bias-spaced-v2-highlight)';
 
-            // --- Data Mapping (Update IDs to match SVG) ---
+            // --- Data Mapping (with TRANSLATED descriptions using MathJax) ---
             const elementInfo = {
                  // Neurons
-                 'node-x1-labeled-spaced-v2': { type: 'neuron', label: 'x<sub>1</sub>', outgoingLines: ['line-x1-h1-labeled-spaced-v2', 'line-x1-h2-labeled-spaced-v2', 'line-x1-h3-labeled-spaced-v2'], description: 'Input feature <code>x<sub>1</sub></code>.' },
-                 'node-x2-labeled-spaced-v2': { type: 'neuron', label: 'x<sub>2</sub>', outgoingLines: ['line-x2-h1-labeled-spaced-v2', 'line-x2-h2-labeled-spaced-v2', 'line-x2-h3-labeled-spaced-v2'], description: 'Input feature <code>x<sub>2</sub></code>.' },
-                 'node-h1-labeled-spaced-v2': { type: 'neuron', label: 'a<sub>1</sub><sup>(1)</sup>', incomingLines: ['line-x1-h1-labeled-spaced-v2', 'line-x2-h1-labeled-spaced-v2'], outgoingLines: ['line-h1-o1-labeled-spaced-v2'], biasId: 'bias-h1-label-spaced-v2', biasArrowId: 'bias-h1-arrow-spaced-v2', description: 'Activation <code>a<sub>1</sub><sup>(1)</sup></code> of the first hidden neuron.' },
-                 'node-h2-labeled-spaced-v2': { type: 'neuron', label: 'a<sub>2</sub><sup>(1)</sup>', incomingLines: ['line-x1-h2-labeled-spaced-v2', 'line-x2-h2-labeled-spaced-v2'], outgoingLines: ['line-h2-o1-labeled-spaced-v2'], biasId: 'bias-h2-label-spaced-v2', biasArrowId: 'bias-h2-arrow-spaced-v2', description: 'Activation <code>a<sub>2</sub><sup>(1)</sup></code> of the second hidden neuron.' },
-                 'node-h3-labeled-spaced-v2': { type: 'neuron', label: 'a<sub>3</sub><sup>(1)</sup>', incomingLines: ['line-x1-h3-labeled-spaced-v2', 'line-x2-h3-labeled-spaced-v2'], outgoingLines: ['line-h3-o1-labeled-spaced-v2'], biasId: 'bias-h3-label-spaced-v2', biasArrowId: 'bias-h3-arrow-spaced-v2', description: 'Activation <code>a<sub>3</sub><sup>(1)</sup></code> of the third hidden neuron.' },
-                 'node-o1-labeled-spaced-v2': { type: 'neuron', label: 'a<sub>1</sub><sup>(2)</sup>', incomingLines: ['line-h1-o1-labeled-spaced-v2', 'line-h2-o1-labeled-spaced-v2', 'line-h3-o1-labeled-spaced-v2'], outgoingLines: [], biasId: 'bias-o1-label-spaced-v2', biasArrowId: 'bias-o1-arrow-spaced-v2', description: 'Activation <code>a<sub>1</sub><sup>(2)</sup></code> of the output neuron.' },
+                 'node-x1-labeled-spaced-v2': { type: 'neuron', label: '\\(x_1\\)', outgoingLines: ['line-x1-h1-labeled-spaced-v2', 'line-x1-h2-labeled-spaced-v2', 'line-x1-h3-labeled-spaced-v2'], description: 'Eingabemerkmal \\(x_1\\).' },
+                 'node-x2-labeled-spaced-v2': { type: 'neuron', label: '\\(x_2\\)', outgoingLines: ['line-x2-h1-labeled-spaced-v2', 'line-x2-h2-labeled-spaced-v2', 'line-x2-h3-labeled-spaced-v2'], description: 'Eingabemerkmal \\(x_2\\).' },
+                 'node-h1-labeled-spaced-v2': { type: 'neuron', label: '\\(a_1^{(1)}\\)', incomingLines: ['line-x1-h1-labeled-spaced-v2', 'line-x2-h1-labeled-spaced-v2'], outgoingLines: ['line-h1-o1-labeled-spaced-v2'], biasId: 'bias-h1-label-spaced-v2', biasArrowId: 'bias-h1-arrow-spaced-v2', description: 'Aktivierung \\(a_1^{(1)}\\) des ersten versteckten Neurons.' },
+                 'node-h2-labeled-spaced-v2': { type: 'neuron', label: '\\(a_2^{(1)}\\)', incomingLines: ['line-x1-h2-labeled-spaced-v2', 'line-x2-h2-labeled-spaced-v2'], outgoingLines: ['line-h2-o1-labeled-spaced-v2'], biasId: 'bias-h2-label-spaced-v2', biasArrowId: 'bias-h2-arrow-spaced-v2', description: 'Aktivierung \\(a_2^{(1)}\\) des zweiten versteckten Neurons.' },
+                 'node-h3-labeled-spaced-v2': { type: 'neuron', label: '\\(a_3^{(1)}\\)', incomingLines: ['line-x1-h3-labeled-spaced-v2', 'line-x2-h3-labeled-spaced-v2'], outgoingLines: ['line-h3-o1-labeled-spaced-v2'], biasId: 'bias-h3-label-spaced-v2', biasArrowId: 'bias-h3-arrow-spaced-v2', description: 'Aktivierung \\(a_3^{(1)}\\) des dritten versteckten Neurons.' },
+                 'node-o1-labeled-spaced-v2': { type: 'neuron', label: '\\(a_1^{(2)}\\)', incomingLines: ['line-h1-o1-labeled-spaced-v2', 'line-h2-o1-labeled-spaced-v2', 'line-h3-o1-labeled-spaced-v2'], outgoingLines: [], biasId: 'bias-o1-label-spaced-v2', biasArrowId: 'bias-o1-arrow-spaced-v2', description: 'Aktivierung \\(a_1^{(2)}\\) des Ausgabe-Neurons.' },
 
                  // Biases (mapped by label ID)
-                 'bias-h1-label-spaced-v2': { type: 'bias', label: 'b<sub>1</sub><sup>(1)</sup>', targetNeuron: 'node-h1-labeled-spaced-v2', arrowId: 'bias-h1-arrow-spaced-v2', description: 'Bias for hidden neuron <code>a<sub>1</sub><sup>(1)</sup></code>.' },
-                 'bias-h2-label-spaced-v2': { type: 'bias', label: 'b<sub>2</sub><sup>(1)</sup>', targetNeuron: 'node-h2-labeled-spaced-v2', arrowId: 'bias-h2-arrow-spaced-v2', description: 'Bias for hidden neuron <code>a<sub>2</sub><sup>(1)</sup></code>.' },
-                 'bias-h3-label-spaced-v2': { type: 'bias', label: 'b<sub>3</sub><sup>(1)</sup>', targetNeuron: 'node-h3-labeled-spaced-v2', arrowId: 'bias-h3-arrow-spaced-v2', description: 'Bias for hidden neuron <code>a<sub>3</sub><sup>(1)</sup></code>.' },
-                 'bias-o1-label-spaced-v2': { type: 'bias', label: 'b<sub>1</sub><sup>(2)</sup>', targetNeuron: 'node-o1-labeled-spaced-v2', arrowId: 'bias-o1-arrow-spaced-v2', description: 'Bias for output neuron <code>a<sub>1</sub><sup>(2)</sup></code>.' },
+                 'bias-h1-label-spaced-v2': { type: 'bias', label: '\\(b_1^{(1)}\\)', targetNeuron: 'node-h1-labeled-spaced-v2', arrowId: 'bias-h1-arrow-spaced-v2', description: 'Bias für verstecktes Neuron \\(a_1^{(1)}\\).' },
+                 'bias-h2-label-spaced-v2': { type: 'bias', label: '\\(b_2^{(1)}\\)', targetNeuron: 'node-h2-labeled-spaced-v2', arrowId: 'bias-h2-arrow-spaced-v2', description: 'Bias für verstecktes Neuron \\(a_2^{(1)}\\).' },
+                 'bias-h3-label-spaced-v2': { type: 'bias', label: '\\(b_3^{(1)}\\)', targetNeuron: 'node-h3-labeled-spaced-v2', arrowId: 'bias-h3-arrow-spaced-v2', description: 'Bias für verstecktes Neuron \\(a_3^{(1)}\\).' },
+                 'bias-o1-label-spaced-v2': { type: 'bias', label: '\\(b_1^{(2)}\\)', targetNeuron: 'node-o1-labeled-spaced-v2', arrowId: 'bias-o1-arrow-spaced-v2', description: 'Bias für Ausgabe-Neuron \\(a_1^{(2)}\\).' },
 
                  // Connections (mapped by line ID)
-                 'line-x1-h1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>11</sub><sup>(1)</sup>', source: 'node-x1-labeled-spaced-v2', target: 'node-h1-labeled-spaced-v2', weightLabelId: 'weight-x1-h1-label-spaced-v2', description: 'Weight from <code>x<sub>1</sub></code> to <code>a<sub>1</sub><sup>(1)</sup></code>.' },
-                 'line-x1-h2-labeled-spaced-v2': { type: 'connection', label: 'w<sub>12</sub><sup>(1)</sup>', source: 'node-x1-labeled-spaced-v2', target: 'node-h2-labeled-spaced-v2', weightLabelId: 'weight-x1-h2-label-spaced-v2', description: 'Weight from <code>x<sub>1</sub></code> to <code>a<sub>2</sub><sup>(1)</sup></code>.' },
-                 'line-x1-h3-labeled-spaced-v2': { type: 'connection', label: 'w<sub>13</sub><sup>(1)</sup>', source: 'node-x1-labeled-spaced-v2', target: 'node-h3-labeled-spaced-v2', weightLabelId: 'weight-x1-h3-label-spaced-v2', description: 'Weight from <code>x<sub>1</sub></code> to <code>a<sub>3</sub><sup>(1)</sup></code>.' },
-                 'line-x2-h1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>21</sub><sup>(1)</sup>', source: 'node-x2-labeled-spaced-v2', target: 'node-h1-labeled-spaced-v2', weightLabelId: 'weight-x2-h1-label-spaced-v2', description: 'Weight from <code>x<sub>2</sub></code> to <code>a<sub>1</sub><sup>(1)</sup></code>.' },
-                 'line-x2-h2-labeled-spaced-v2': { type: 'connection', label: 'w<sub>22</sub><sup>(1)</sup>', source: 'node-x2-labeled-spaced-v2', target: 'node-h2-labeled-spaced-v2', weightLabelId: 'weight-x2-h2-label-spaced-v2', description: 'Weight from <code>x<sub>2</sub></code> to <code>a<sub>2</sub><sup>(1)</sup></code>.' },
-                 'line-x2-h3-labeled-spaced-v2': { type: 'connection', label: 'w<sub>23</sub><sup>(1)</sup>', source: 'node-x2-labeled-spaced-v2', target: 'node-h3-labeled-spaced-v2', weightLabelId: 'weight-x2-h3-label-spaced-v2', description: 'Weight from <code>x<sub>2</sub></code> to <code>a<sub>3</sub><sup>(1)</sup></code>.' },
-                 'line-h1-o1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>11</sub><sup>(2)</sup>', source: 'node-h1-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h1-o1-label-spaced-v2', description: 'Weight from <code>a<sub>1</sub><sup>(1)</sup></code> to <code>a<sub>1</sub><sup>(2)</sup></code>.' },
-                 'line-h2-o1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>21</sub><sup>(2)</sup>', source: 'node-h2-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h2-o1-label-spaced-v2', description: 'Weight from <code>a<sub>2</sub><sup>(1)</sup></code> to <code>a<sub>1</sub><sup>(2)</sup></code>.' },
-                 'line-h3-o1-labeled-spaced-v2': { type: 'connection', label: 'w<sub>31</sub><sup>(2)</sup>', source: 'node-h3-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h3-o1-label-spaced-v2', description: 'Weight from <code>a<sub>3</sub><sup>(1)</sup></code> to <code>a<sub>1</sub><sup>(2)</sup></code>.' },
+                 'line-x1-h1-labeled-spaced-v2': { type: 'connection', label: '\\(w_{11}^{(1)}\\)', source: 'node-x1-labeled-spaced-v2', target: 'node-h1-labeled-spaced-v2', weightLabelId: 'weight-x1-h1-label-spaced-v2', description: 'Gewicht von \\(x_1\\) zu \\(a_1^{(1)}\\).' },
+                 'line-x1-h2-labeled-spaced-v2': { type: 'connection', label: '\\(w_{12}^{(1)}\\)', source: 'node-x1-labeled-spaced-v2', target: 'node-h2-labeled-spaced-v2', weightLabelId: 'weight-x1-h2-label-spaced-v2', description: 'Gewicht von \\(x_1\\) zu \\(a_2^{(1)}\\).' },
+                 'line-x1-h3-labeled-spaced-v2': { type: 'connection', label: '\\(w_{13}^{(1)}\\)', source: 'node-x1-labeled-spaced-v2', target: 'node-h3-labeled-spaced-v2', weightLabelId: 'weight-x1-h3-label-spaced-v2', description: 'Gewicht von \\(x_1\\) zu \\(a_3^{(1)}\\).' },
+                 'line-x2-h1-labeled-spaced-v2': { type: 'connection', label: '\\(w_{21}^{(1)}\\)', source: 'node-x2-labeled-spaced-v2', target: 'node-h1-labeled-spaced-v2', weightLabelId: 'weight-x2-h1-label-spaced-v2', description: 'Gewicht von \\(x_2\\) zu \\(a_1^{(1)}\\).' },
+                 'line-x2-h2-labeled-spaced-v2': { type: 'connection', label: '\\(w_{22}^{(1)}\\)', source: 'node-x2-labeled-spaced-v2', target: 'node-h2-labeled-spaced-v2', weightLabelId: 'weight-x2-h2-label-spaced-v2', description: 'Gewicht von \\(x_2\\) zu \\(a_2^{(1)}\\).' },
+                 'line-x2-h3-labeled-spaced-v2': { type: 'connection', label: '\\(w_{23}^{(1)}\\)', source: 'node-x2-labeled-spaced-v2', target: 'node-h3-labeled-spaced-v2', weightLabelId: 'weight-x2-h3-label-spaced-v2', description: 'Gewicht von \\(x_2\\) zu \\(a_3^{(1)}\\).' },
+                 'line-h1-o1-labeled-spaced-v2': { type: 'connection', label: '\\(w_{11}^{(2)}\\)', source: 'node-h1-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h1-o1-label-spaced-v2', description: 'Gewicht von \\(a_1^{(1)}\\) zu \\(a_1^{(2)}\\).' },
+                 'line-h2-o1-labeled-spaced-v2': { type: 'connection', label: '\\(w_{21}^{(2)}\\)', source: 'node-h2-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h2-o1-label-spaced-v2', description: 'Gewicht von \\(a_2^{(1)}\\) zu \\(a_1^{(2)}\\).' },
+                 'line-h3-o1-labeled-spaced-v2': { type: 'connection', label: '\\(w_{31}^{(2)}\\)', source: 'node-h3-labeled-spaced-v2', target: 'node-o1-labeled-spaced-v2', weightLabelId: 'weight-h3-o1-label-spaced-v2', description: 'Gewicht von \\(a_3^{(1)}\\) zu \\(a_1^{(2)}\\).' },
 
                   // Weights (mapped by label ID - link back to line)
                  'weight-x1-h1-label-spaced-v2': { type: 'weight', connectionId: 'line-x1-h1-labeled-spaced-v2'},
@@ -1203,7 +1269,7 @@
 
             function getElement(id) { return svg.querySelector(`#${id}`); }
 
-            function addHighlight(elementId) { /* ... (same as before, using updated marker IDs) ... */
+            function addHighlight(elementId) {
                 const element = getElement(elementId);
                  if (element) {
                      element.classList.add('highlight');
@@ -1216,7 +1282,7 @@
                  }
             }
 
-             function clearAllHighlights() { /* ... (same as before, using updated marker IDs) ... */
+             function clearAllHighlights() {
                  highlightedElements.forEach(id => {
                      const element = getElement(id);
                      if (element) {
@@ -1230,125 +1296,168 @@
                  highlightedElements = [];
             }
 
-             function handleInteraction(elementId) { /* ... (same as before, using updated IDs from elementInfo) ... */
+             function handleInteraction(elementId) {
                  clearAllHighlights();
                  let info = elementInfo[elementId];
                  if (!info) return;
                  let rootElementId = elementId;
                  let rootInfo = info;
+
+                 // If a weight label was clicked, treat it as clicking the connection
                  if (info.type === 'weight' && info.connectionId) {
                      rootElementId = info.connectionId;
                      rootInfo = elementInfo[rootElementId];
-                     if (!rootInfo) return;
+                     if (!rootInfo) return; // Should exist
                  }
+                 // If a connection click target was clicked, use the actual line's ID
                  if (info.type === 'connection') {
-                     rootElementId = elementId;
-                     rootInfo = info;
+                    // rootElementId = elementId; // Already correct if mapped by line ID
+                    rootInfo = info;
                  }
-                 let description = rootInfo.description || `Clicked: ${rootInfo.type} ${rootInfo.label || rootElementId}`;
+
+
+                 let description = rootInfo.description || `Geklickt: ${rootInfo.type} ${rootInfo.label || rootElementId}`; // Fallback German text
+
+                 // Highlight elements based on the 'root' element identified
                  if (rootInfo.type === 'neuron') {
-                     addHighlight(rootElementId);
+                     addHighlight(rootElementId); // Highlight the neuron itself
                      if (rootInfo.biasId) addHighlight(rootInfo.biasId);
                      if (rootInfo.biasArrowId) addHighlight(rootInfo.biasArrowId);
                      if (rootInfo.incomingLines) rootInfo.incomingLines.forEach(id => { addHighlight(id); const lineInfo = elementInfo[id]; if (lineInfo && lineInfo.weightLabelId) addHighlight(lineInfo.weightLabelId); });
                      if (rootInfo.outgoingLines) rootInfo.outgoingLines.forEach(id => { addHighlight(id); const lineInfo = elementInfo[id]; if (lineInfo && lineInfo.weightLabelId) addHighlight(lineInfo.weightLabelId); });
-                     description = `<strong>Activation:</strong> <code>${rootInfo.label}</code><br>${rootInfo.description}`;
+                     description = `<strong>Aktivierung:</strong> ${rootInfo.label}<br>${rootInfo.description}`;
                  } else if (rootInfo.type === 'bias') {
-                     addHighlight(rootElementId);
+                     addHighlight(rootElementId); // Highlight the bias label
                      if (rootInfo.arrowId) addHighlight(rootInfo.arrowId);
                      if (rootInfo.targetNeuron) addHighlight(rootInfo.targetNeuron);
-                     description = `<strong>Bias:</strong> <code>${rootInfo.label}</code><br>${rootInfo.description}`;
+                     description = `<strong>Bias:</strong> ${rootInfo.label}<br>${rootInfo.description}`;
                  } else if (rootInfo.type === 'connection') {
-                     addHighlight(rootElementId);
+                     addHighlight(rootElementId); // Highlight the connection line
                      if (rootInfo.weightLabelId) addHighlight(rootInfo.weightLabelId);
                      if (rootInfo.source) addHighlight(rootInfo.source);
                      if (rootInfo.target) addHighlight(rootInfo.target);
-                     description = `<strong>Weight:</strong> <code>${rootInfo.label}</code><br>${rootInfo.description}`;
+                     description = `<strong>Gewicht:</strong> ${rootInfo.label}<br>${rootInfo.description}`;
                  }
+
                  descriptionEl.innerHTML = description;
+                 // Re-render MathJax for the new description
+                 if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                     MathJax.typesetPromise([descriptionEl]);
+                 }
             }
 
-             interactiveElements.forEach(element => { /* ... (same event listener logic as before) ... */
+             interactiveElements.forEach(element => {
                  element.addEventListener('click', (event) => {
                      event.stopPropagation();
                      let targetId = element.id;
-                     if (element.classList.contains('connection-click-target')) { targetId = element.dataset.targetline; }
-                     if (!targetId && element.parentElement.id && elementInfo[element.parentElement.id]) { targetId = element.parentElement.id; }
-                     if (targetId && elementInfo[targetId]) { handleInteraction(targetId); }
+                     // Handle invisible line targets
+                     if (element.classList.contains('connection-click-target')) {
+                         targetId = element.dataset.targetline;
+                     }
+                     // Handle clicks on sub-elements like tspan within weight/bias labels if they don't have their own ID
+                     if (!targetId && element.parentElement && element.parentElement.classList.contains('interactive-element')) {
+                          targetId = element.parentElement.id;
+                     }
+
+                     if (targetId && elementInfo[targetId]) {
+                         handleInteraction(targetId);
+                     } else {
+                         // Fallback if somehow an interactive element doesn't map
+                         console.warn("Clicked element without info:", element);
+                     }
                  });
             });
 
-             svg.addEventListener('click', (event) => { /* ... (same event listener logic as before) ... */
+             svg.addEventListener('click', (event) => {
                   if (event.target === svg || !event.target.closest('.interactive-element')) {
                       clearAllHighlights();
-                      descriptionEl.innerHTML = 'Click on a neuron, connection line, weight (w), or bias (b) label to learn more.';
+                      // Default description translated
+                      descriptionEl.innerHTML = 'Klicke auf ein Neuron, eine Verbindungslinie, ein Gewicht (w) oder eine Bias (b)-Beschriftung, um mehr zu erfahren.';
                   }
              });
 
-             descriptionEl.innerHTML = 'Click on a neuron, connection line, weight (w), or bias (b) label to learn more.';
+             // Initial description translated
+             descriptionEl.innerHTML = 'Klicke auf ein Neuron, eine Verbindungslinie, ein Gewicht (w) oder eine Bias (b)-Beschriftung, um mehr zu erfahren.';
 
         })();
     </script>
 
 </div>
 <!-- End: Interactive Network Diagram Navigator (Labeled - Spaced v2) -->
-        <p>Use the interactive diagram above to get comfortable with the notation. Understanding where each weight and bias belongs is crucial for the next step: calculating the activations for a whole layer efficiently using matrices.</p>
-        <div class="continue-button" onclick="showNextSection(15)">Continue</div>
+        
+        <div class="continue-button" onclick="showNextSection(16)">Weiter</div>
     </section>
 
-    <section id="section15">
-    <h2>Lesson Recap</h2>
-    <p>Fantastic! We've now assembled neurons into networks:</p>
-    <ul>
-        <li><strong>Layers:</strong> Networks are organized into Input, Hidden, and Output layers.</li>
-        <li><strong>Feedforward:</strong> Information flows one way, from input to output.</li>
-        <li><strong>Fully Connected:</strong> Often, all neurons in adjacent layers are connected.</li>
-        <li><strong>Depth:</strong> Networks can have multiple hidden layers, enabling hierarchical feature learning.</li>
-        <li><strong>Notation:</strong> We established notation \(\ a_j^{(l)}\), \(\ w_{ij}^{(l)}\), \(\ b_j^{(l)}\) to precisely describe network components.</li>
-    </ul>
+    <section id="section16">
+        <!-- Header and list items translated -->
+        <h2>Zusammenfassung der Lektion</h2>
+        <p>Fantastisch! Wir haben nun Neuronen zu Netzwerken zusammengesetzt:</p>
+        <ul>
+            <li><strong>Schichten:</strong> Netzwerke sind in Eingabe-, Versteckte und Ausgabe-Schichten organisiert.</li>
+            <li><strong>Feedforward:</strong> Informationen fließen in eine Richtung, von der Eingabe zur Ausgabe.</li>
+            <li><strong>Voll verbunden:</strong> Oft sind alle Neuronen in benachbarten Schichten miteinander verbunden.</li>
+            <li><strong>Tiefe:</strong> Netzwerke können mehrere versteckte Schichten haben, was hierarchisches Merkmalslernen ermöglicht.</li>
+            <li><strong>Notation:</strong> Wir haben die Notation \(a_j^{(l)}\), \(w_{ij}^{(l)}\), \(b_j^{(l)}\) eingeführt, um Netzwerkkomponenten präzise zu beschreiben.</li>
+        </ul>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(17)">Weiter</div>
+    </section>
+
+    <section id="section17">
     <div class="test-your-knowledge">
-        <h3>Test Your Knowledge</h3>
-        <h4>In the notation \(\ w_{34}^{(2)}\), what does the superscript \(\ (2)\) indicate?</h4>
+        <!-- Header and question translated -->
+        <h3>Teste dein Wissen</h3>
+        <h4>Was bedeutet der hochgestellte Index \((2)\) in der Notation \(w_{34}^{(2)}\)?</h4>
+        <!-- Options and feedback translated -->
         <div id="option1" class="option-container" onclick="checkAnswer(1, false)">
-            <p>The weight connects to the 2nd neuron in layer 3.</p>
+            <p>Das Gewicht führt zum 2. Neuron in Schicht 3.</p>
             <div id="feedback1" class="option-feedback incorrect-feedback">
-                <p>The superscript indicates the destination layer.</p>
+                <p>Nicht ganz. Der hochgestellte Index gibt die Zielschicht an.</p>
             </div>
         </div>
         <div id="option2" class="option-container" onclick="checkAnswer(2, false)">
-            <p>The weight connects from the 2nd neuron in layer 1.</p>
+            <p>Das Gewicht kommt vom 2. Neuron in Schicht 1.</p>
             <div id="feedback2" class="option-feedback incorrect-feedback">
-                <p>The superscript indicates the destination layer, and the subscripts indicate source and destination neurons.</p>
+                <p>Leider nicht. Der hochgestellte Index ist die Zielschicht, und die tiefgestellten Indizes geben Quell- und Zielneuron an.</p>
             </div>
         </div>
         <div id="option3" class="option-container" onclick="checkAnswer(3, true)">
-            <p>This weight is part of the calculations for Layer 2 (connecting Layer 1 to Layer 2).</p>
+            <p>Dieses Gewicht ist Teil der Berechnungen für Schicht 2 (verbindet Schicht 1 mit Schicht 2).</p>
             <div id="feedback3" class="option-feedback correct-feedback">
-                <p>Correct! The superscript \(\ l\) in \(\ w_{ij}^{(l)}\) denotes the layer that the weight connects <em>into</em> (the destination layer), meaning it connects layer \(\ l - 1\) to layer \(\ l\).</p>
+                <p>Genau richtig! Der hochgestellte Index \(l\) in \(w_{ij}^{(l)}\) bezeichnet die Schicht, in die das Gewicht <em>hineinführt</em> (die Zielschicht), d.h., es verbindet Schicht \(l-1\) mit Schicht \(l\).</p>
             </div>
         </div>
         <div id="option4" class="option-container" onclick="checkAnswer(4, false)">
-            <p>This is the weight for the 2nd input feature overall.</p>
+            <p>Dies ist das Gewicht für das 2. Eingabemerkmal insgesamt.</p>
             <div id="feedback4" class="option-feedback incorrect-feedback">
-                <p>The notation refers to connections between neurons in specific layers, not overall input features.</p>
+                <p>Knapp daneben. Die Notation bezieht sich auf Verbindungen zwischen Neuronen in spezifischen Schichten, nicht auf allgemeine Eingabemerkmale.</p>
             </div>
         </div>
     </div>
-    <p>Connecting neurons is the first step. Next, we'll learn how to use the power of linear algebra (matrices!) to perform the calculations for entire layers efficiently.</p>
-</section>
+        <!-- Button text translated -->
+        <div class="continue-button" onclick="showNextSection(18)">Weiter</div>
+    </section>
+
+    <section id="section18">
+        <!-- Paragraphs translated -->
+        <p>Das Verbinden von Neuronen ist der erste Schritt. Als Nächstes lernen wir, wie wir die Kraft der Linearen Algebra (Matrizen!) nutzen, um die Berechnungen für ganze Schichten effizient durchzuführen.</p>
+        <p>Hier geht's zum Fragebogen!</p>
+    </section>
 
 
     <script>
-        // Show the first section initially
+        // JS for section reveal, answer reveal remains the same.
+        // JS for quiz check remains the same, only HTML text was changed.
+        // JS for interactive diagrams updated within their sections.
         document.getElementById("section1").style.display = "block";
         document.getElementById("section1").style.opacity = "1";
 
         function showNextSection(nextSectionId) {
             const currentButton = event.target;
             const nextSection = document.getElementById("section" + nextSectionId);
-            
+
             currentButton.style.display = "none";
-            
+
             nextSection.style.display = "block";
             setTimeout(() => {
                 nextSection.style.opacity = "1";
@@ -1357,12 +1466,19 @@
             setTimeout(() => {
                 nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 500);
+
+             // Re-render MathJax when a section becomes visible, especially those with dynamic content
+             setTimeout(() => {
+                if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                     MathJax.typesetPromise([nextSection]);
+                }
+             }, 50); // Small delay to ensure elements are displayed
         }
 
         function revealAnswer(id) {
             const revealText = document.getElementById(id);
             const revealButton = event.target;
-            
+
             revealText.style.display = "block";
             revealButton.style.display = "none";
         }
@@ -1371,18 +1487,32 @@
             // Hide all feedback first
             document.querySelectorAll('.option-feedback').forEach(feedback => {
                 feedback.style.display = 'none';
+                 // Reset background color
+                 feedback.parentElement.style.backgroundColor = '';
             });
-            
+
             // Show the feedback for the selected option
             const feedback = document.getElementById('feedback' + optionNumber);
             feedback.style.display = 'block';
-            
-            // Highlight the correct answer
+
+            // Rerender MathJax for the feedback
+            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                 MathJax.typesetPromise([feedback]);
+            }
+
+            // Highlight the selected option
             if (isCorrect) {
                 document.getElementById('option' + optionNumber).style.backgroundColor = '#d4edda';
             } else {
                 document.getElementById('option' + optionNumber).style.backgroundColor = '#f8d7da';
-                document.getElementById('option3').style.backgroundColor = '#d4edda';
+                 // Optionally highlight the correct answer if the user was wrong
+                 const correctOptionContainer = document.querySelector('#feedback3').parentElement; // Assumes option 3 is correct
+                 if (correctOptionContainer) {
+                     correctOptionContainer.style.backgroundColor = '#d4edda';
+                     // Show correct feedback as well if desired
+                     // document.getElementById('feedback3').style.display = 'block';
+                     // MathJax.typesetPromise([document.getElementById('feedback3')]);
+                 }
             }
         }
     </script>
